@@ -12,13 +12,17 @@ n_cores=40
 data_dir='../../data/'
 tree_dir='../../data/combinedTree/'
 
-while getopts i: option
+while getopts i:t: option
 do
 case "${option}"
 in
     i) genomes_directory=${OPTARG};;
+    t) n_cores=${OPTARG};;
 esac
 done
+
+echo 'number of cores used'
+echo $n_cores
 
 echo 'genomes directory'
 echo $genomes_directory
@@ -72,3 +76,7 @@ mv outtree $tree_dir'allPfamsAveraged_treeDist.outtree'
 python3 mapBackTreeLeafNames.py $data_dir'allPfamsAveraged_treeDist_padded_number2bin_dic.json' $tree_dir'allPfamsAveraged_treeDist.outtree'
 
 python3 annotateTreeParents.py $tree_dir'allPfamsAveraged_treeDist.outtree' $tree_dir
+
+END=$(date +%s)
+DIFF=$(( $END - $START ))
+echo "Exec time $DIFF seconds"
