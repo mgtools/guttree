@@ -19,7 +19,14 @@ In this section we will describe the steps and the code used to build a phylogen
 * [Combining distance matrices](#combining-distance-matrices)
 * [Building a final Tree using neighborhood joining approach](#building-a-final-tree-using-neighborhood-joining-approach)
 
-All of these steps and the code involved are explained below, to run this entire pipeline in one command we made a script that combines all the steps which could be found [here](buildTree/treeBuildingPipeline/constructTree.sh).
+All of these steps and the code involved are explained below, to run this entire pipeline in one command we made a script that combines all the steps. This script requires 1 mandatory command line argument which is the directory where the contigs and the genome are located in fasta format. You can also satisfy the number of cores used using the -t parameters (default is 40).
+
+To run pipleine in one command simply use the script [constructTree.sh](buildTree/treeBuildingPipeline/constructTree.sh).
+
+example to run script:
+```
+sh constructTree.sh -i ../../genomes_dir/ -t 40
+```
 
 An overview of the pipeline is summarized in this figure:
 ![GitHub Logo](buildTree/tree_building_pipeline.png)
