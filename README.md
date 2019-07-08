@@ -1,1 +1,204 @@
-# guttree
+## Human_Gut_Tree
+### git hub repository for human gut tree project
+
+* The repository will contain a full pipeline of building a bacterial tree of life starting from contigs and or binned genomes all the way to a tree in newick format.
+* This github will also include helper scripts to annotae the tree (and the steps involved in annotating the tree)
+* scripts needed to generate label files used in the metaproteomic application
+* scripts needed to generate label files used in metagenomic aapplication
+
+### Buidling phylogenetic Tree by marker profile distance averaging method
+In this section we will describe the steps and the code used to build a phylogenetic tree given list of contigs. The algorithm starts from a set of contigs or genomes (depending on the completeness of your datasets) to a phylogenetic tree representing these contigs. The main steps involved for this pipeline is as follows:
+
+* [Prediction protien coding genes from contigs or genomes](#prediction-protien-coding-genes-from-contigs-or-genomes)
+* [Searching for marker gene profile matches within the predicted proteins](#searching-for-marker-gene-profile-matches-within-the-predicted-proteins)
+* [Extracting pfam to sequene hits and best pfam to sequence hit](#extracting-pfam-to-sequene-hits-and-best-pfam-to-sequence-hit)
+* [Creating pfam multi-fasta files for multiple sequence alignments](#creating-pfam-multi-fasta-files-for-multiple-sequence-alignments)
+* [Performing multiple sequence alignments using MUSCLE](#performing-multiple-sequence-alignments-using-MUSCLE)
+* [Phylogenetic tree construction using FastTree](#phylogenetic-tree-construction-using-fasttree)
+* [Phylogenetic tree to distance matrix](#phylogenetic-tree-to-distance-matrix)
+* [Combining distance matrices](#combining-distance-matrices)
+* [Building a final Tree using neighborhood joining approach](#building-a-final-tree-using-neighborhood-joining-approach)
+
+All of these steps and the code involved are explained below, to run this entire pipeline in one command we made a script that combines all the steps which could be found [here](buildTree/treeBuildingPipeline/constructTree.sh).
+
+An overview of the pipeline is summarized in this figure:
+![GitHub Logo](buildTree/tree_building_pipeline.png)
+
+### Rooting the phylogenetic tree using an outgroup
+In order to root out phylogenetic tree properly and to have two branches coming from the root node, we need to define an outgroup and use it to root the tree. In our bacterial tree of life example we used a set of 7 Archaea genomes whose most specific common ancestor was used as the outgroup clade. To do this we created a script called ['rootTree_usingOutgroup.py'](buildTree/treeBuildingPipeline/rootTree_usingOutgroup.py). Note that this step requires manual intervention because we need the user to spceify the outgroup genomes based on genome data used. This script requires two arguments to run:
+
+1) input tree file 
+2) directory for the output to dump the rooted tree.
+
+This script will also prompt the used to input the genome or bin IDs for the genomes or bins to be used as the outgroup. The user should enter the IDs without the file extensions, then the script will calculate the most recent common ancestor of this list of species entered and will use that common ancestor to be the outtgroup clade.
+
+Example to run this script:
+```
+pyhton3 rooTree_usingOutgroup.py ../../data/combinedTree/allPfamsAveraged_treeDist.outtree ../../data/
+```
+
+### ---------------------Detail explanation of the steps mentioned above-----------------------------
+
+#### Prediction protien coding genes from contigs or genomes
+Before we start with the gene prediction we made a small helper script that will unify the genome extensions in case your genomes come from multiple sources with different extensions, this will help to be able to split genome IDs for later. The script used for that can be found [here](buildTree/treeBuildingPipeline/unifyGenomeExtensions.py). To run this script you need to specify one command line argument which is the directory where you stored the genomes. It will overwrite the same directory by using '.fasta' as the file extension.
+
+Example to run this script:
+```
+python3 unifyGenomeExtensions.py ../../sample_genomes/
+```
+
+It is essential that we have a list of genes for the genomes of interest to extract marker gene information later to build the tree. Here we use FragGeneScan (FGS) in order to predict the protein coding genes.
+To predict genes we made a [script](buildTree/treeBuidlingPipeline/runFGS.sh), 'runFGS.sh' that calls FragGeneScan over all the contigs specified in a particular folder. This script takes four command line arguments:
+
+1) input directory containing all contigs
+2) number of threads used by the program.
+3) output directory for the FGS to dumpt it's predicted genes and other produced files
+4) extension for the files in a folder, if your contigs have more than one extension then simply do not use this parameter
+
+Example to run this script:
+```
+sh runFGS.sh -i ../../sample_genomes -t 40 -o ../../data/sample_genomes.FGS
+
+or if extension is to be specified
+
+sh runFGS.sh -i ../../sample_genomes -t 40 -o ../../data/sample_genomes.FGS -e .fa
+```
+
+#### Searching for marker gene profile matches within the predicted proteins
+The next step after gene prediction would be to scan marker gene profiles against proteins of these genes. Since we use FGS for the task of gene prediction, it also produces the translated protein sequences of these genes. 
+These produced protein sequences are used to scan (search) these marker gene profiles against them. I have predefined marker gene profiles and a precompiled hmmer database which I am including with this github. The list of pfam profiles can be found [here](buildTree/treeBuildingData/ribosomal_GTP_EFTU_pfamIDs_list.txt) and the hmmer3 database is found [here](buildTree/treeBuildingData/ribosmal_GTP_EFTU_pfam_db/)
+To search for significant hits betwen sequences and these predefined profiles hmmscan function from Hmmer3 is used. To do this we made the following script [script](buildTree/treeBuidlingPipeline/runHMMSCAN.sh), 'runHMMSCAN.sh'. This will call hmmscan function of hmmer, and will produce two files per scanned proteome file in this case, one is a tabular file and another is a human readable file at an output folder specified by the output parameter. This script takes five command line arguments:
+
+1) input directory containing protein sequences in fasta format
+2) number of threads used by the program.
+3) output directory to dump the hmmscan output
+4) directory for the precompiled hmmer database
+4) extension for the files in a folder, if your fasta sequences have more than one extension then simply do not use this parameter
+
+Example to run this script:
+```
+sh runHMMSCAN.sh -i ../../data/sample_genomes.FGS -t 40 -o ../../data/sample_genomes.FGS_hmmscan_out -m ../treeBuildingData/ribosmal_GTP_EFTU_pfam_db/ribosomal_GTP_EFTU_profiles.hmm
+
+or if extension is to be specified
+
+sh runHMMSCAN.sh -i ../../data/sample_genomes.FGS -t 40 -o ../../data/sample_genomes.FGS_hmmscan_out -m ../treeBuildingData/ribosmal_GTP_EFTU_pfam_db/ribosomal_GTP_EFTU_profiles.hmm -e .faa
+```
+
+#### Extracting pfam to sequene hits, and best pfam to sequence hit
+Now that we have all the hmmscan outputs, we create a [script](buildTree/treeBuildingPipeline/extractPfamSeqHits.py) called 'extractPfamSeqHits.py', that will go over the text output of hmmscan and will parse them and extract two files from each hmmscan out file. The first one will be all the hits between the pfams and the sequenes scanned against that are significant and the second one will be for each pfam the best sequence hit between that pfam and that particualr genome. The results for this scrip are to be stored in a directory specified at command line. The script will further create two directories within the specified ourput directory. This script takes 3 command line arguments:
+
+1) input directory for the hmmscan output files
+2) number of threads used by the program
+3) output directory to dump the extracted sequence hits:
+
+example to run this script:
+```
+python3 extractPfamSeqHits.py ../../data/sample_genomes.FGS_hmmscan_out/ 40 ../../data/
+```
+#### Creating pfam multi-fasta files for multiple sequence alignments
+Here we use the information from the previous script and create a multi-fasta file for each pfam and their best sequence hits with each genome. Note that some pfams might not be present in some of the genomes hence they will not have representative sequecnes from those genomes. This is done by two scripts ['binID2BestPfamSeqs.py'](buildTree/treeBuildingPipeline/binID2BestPfamSeqs.py) and ['extract_profile_sequences.py'](buildTree/treeBuildingPipeline/extract_profile_sequences.py)
+
+The script 'binID2BestPfamSeqs.py' takes two command line arguments:
+1) directory for the best pfam hits directory
+2) output directory to store the files
+
+The script 'extract_profile_sequences.py' takes two command line arguments:
+1) the pfams to binns to sequences dictionary of dictionaries file
+2) output directory to store the files
+
+```
+python3 binID2BestPfamSeqs.py ../../data/gene2bestpfam_hits/ ../../data/
+
+and 
+
+python3 extract_profile_sequences.py ../../data/pfam2bins2bestPfamSeqs_dic_of_dics.json ../../data/bin2bestPfam_seqs/
+```
+
+
+#### Performing multiple sequence alignments using MUSCLE
+Now that best sequence hits between pfams and genomes are extracted in mulit-fasta format, MUSCLE is used to calculate one multiple sequence alignment per pfam. To do this we use two scripts, a python script calling MUSCLE which is ['get_pfam_MSA.py'](buildTree/treeBuildingPipeline/get_pfam_MSA.py) and another bash script that parallelizes this process found [here](buildTree/treeBuildingPipeline/get_MSA_parallel.sh). The bash script takes three arguments:
+
+1) input directory for the folder containing multi-fasta files
+2) number of threads to be used
+3) output directory for the script to dump the multiple sequence alignments (in fasta format)
+
+example to run the script:
+```
+sh get_MSA_parallel.sh -i ../../data/bin2bestPfam_seqs -t 40 -o ../../data/pfam_MSA
+````
+
+#### Phylogenetic tree construction using FastTree
+After obtaining the multiple sequence alignments for each pfam, we use FastTree to construct one phylogenetic tree per pfam. To do this we use two scripts, a python script calling MUSCLE which is ['getFastTreeFromMSA.py'](buildTree/treeBuildingPipeline/getFastTreeFromMSA.py) and another bash script that parallelizes this process found [here](buildTree/treeBuildingPipeline/get_FastTree_parallel.sh). The bash script takes three arguments:
+
+1) input directory for the folder containing multiple sequence alignments
+2) number of threads to be used
+3) output directory for the script to dump the phylogenetic trees (in newick format)
+
+example to run the script:
+```
+sh get_FastTree_parallel.sh -i ../../data/pfam_MSA -t 20 -o ../../data/pfam_FastTree
+````
+
+#### Phylogenetic tree to distance matrix
+After having created individual trees for each pfam, now we need to get pairwise species evolutionary distances from these trees. We do that by using and R package which calculates such distances based on tree branches. We use an Rscript to do that which can be found [here](buildTree/treeBuildingPipeline/cophenetic_phylo.R). This script takes two command line arguments to run:
+
+1) the input directory for the phylogenetic trees
+2) the output directory to store the calculated distance matrices
+
+example to run the script:
+```
+Rscript cophenetic_phylo.R ../../data/pfam_FastTree/ ../../data/pfam_FastTree_treeDist/
+```
+
+#### Combining distance matrices
+Now that we have individual distance matrices for each of the pfam profiles, it is time to do the averaging step and complie one big matrix composed of all the species, whose values are going to be the average values of all the values within the individual matrices for a particular species pair. Note that if a distance between a species pair does not exist in one of the pfam matrices, then that matrix will not be included in the averaging for that species pair. To perform this averaging we made the script called ['combTreeDistMats.py'](buildTree/treeBuildingPipeline/combTreeDistMats.py). This script takes one command line argument to run:
+
+1) input directoru for the calculated pfam distance matrices
+
+example to run the script:
+```
+python3 combTreeDistMats.py ../../data/pfam_FastTree_treeDist/
+```
+
+#### Building a final Tree using neighborhood joining approach
+After combining all the individual pfam matrices into one matrix containing all against all pairwise evolutionary distances between the pariticipating species, we now have all the necesarry information to build a final tree covering all the species. To build the final tree from a distance matrix we are using a neighborhood joining approach provided by PHYLIP software. This requires a few steps to get to a tree from a distance matrix. The first step is to convert the distance matrix to phylip format, this is done by the script ['dfMat2phylip.py'](buildTree/treeBuildingPipeline/dfMat2phylip.py). This script requires one command line argumment which is the averaged distance matrix file tor run:
+
+1) directory to the averaged pfam distance matrix file
+
+We also need to change the leaf names to padded format since neighborhood joining program in PHYLIP requires a padding of 10 for the leaf IDs within the distance matrix. This is achieved through the script ['convert2phylip10Padding.py'](buildTree/treeBuildingPipeline/convert2phylip10Padding.py). This script requires two command line arguments:
+
+1) path to the input matrix file created by the first script
+2) output  directory to store the mapping dictionary between these arbitrary padded leaf IDs and the actual leaf IDs.
+
+This script will also produce a file that is the command line arguments to run PHYLIP's neighbor program.
+
+Next it is time to call PHYLIP's neighbor program through the command line to actually create a phylogenetically tree in newick format.
+The final step is to map back these arbitrary IDs to the actual leaf IDs using the created dictionary. This is done through the script ['mapBackTreeLeafNames.py'](buildTree/treeBuildingPipeline/mapBackTreeLeafNames.py), which requires two command line arguments to run:
+
+1) path to the ID mapping dictionary file
+2) path to the output tree created by PHYLIP's neighbor program
+
+A final step after creating the tree is to provide the internal parent nodes with names so that later they can be referred. To do this we wrote a script called ['annotateTreeParents.py'](buildTree/treeBuildingPipeline/annotateTreeParents.py), which requries two command line arguments to run:
+
+1) path to the tree file
+2) output directory to store the named tree.
+
+example to run these scripts:
+```
+python3 dfMat2phylip.py ../../data/pfam_FastTree_treeDist/allPfamsAveraged_treeDist.txt
+
+python3 convert2phylip10Padding.py ../../data/pfam_FastTree_treeDist/allPfamsAveraged_treeDist.phylip ../../data/
+
+neighbor < neighbor_cmds.txt > screenout &
+
+mv outfile ../../data/combinedTree/allPfamsAveraged_treeDist.outfile
+mv outtree ../../data/combinedTree/allPfamsAveraged_treeDist.outtree
+
+python3 mapBackTreeLeafNames.py ../../data/allPfamsAveraged_treeDist_padded_number2bin_dic.json ../../data/combinedTree/allPfamsAveraged_treeDist.outtree
+
+python3 annotateTreeParents.py ../../data/combinedTree/allPfamsAveraged_treeDist.outtree ../../data/combinedTree/
+```
+
+
+
+
