@@ -379,3 +379,14 @@ wget https://data.ace.uq.edu.au/public/gtdbtk
 installing the package:
 
 pip install gtdbtk
+
+download and unpack taxonomical information for gtdbtk to function:
+
+wget https://data.ace.uq.edu.au/public/gtdb/data/releases/release89/89.0/gtdbtk_r89_data.tar.gz
+tar xvzf gtdbtk_r89_data.tar.gz
+wget https://data.ace.uq.edu.au/public/gtdbtk
+
+set the GTDBTK_DATA_PATH variable to point where these datasets were downloaded.
+```
+
+
