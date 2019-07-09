@@ -65,7 +65,7 @@ pyhton3 rooTree_usingOutgroup.py ../../data/combinedTree/allPfamsAveraged_treeDi
 Here we are using GTDBTK taxonomies to assign our genomes/bins with taxonomies using the least common ancestor approach. To do this we issue the following command:
 
 ```
-gtdbtk classify_wf --cpus 64 --genome_dir final_genomes/ --extension fasta --out_dir final_genomes.classify_wf/
+gtdbtk classify_wf --cpus 64 --genome_dir final_genomes/ --extension fasta --out_dir data/final_genomes.classify_wf/
 ```
 where we specified the folder where all of these genomes/bins are found in fasta format, and the output directory for the generated files to be stored plus number of CPUs used. This command will generate different taxonomical assignment files for the different kingdoms. i.e. Archaea and Bacteria in our case. These files are called 'gtdbtk.ar122.summary.tsv' and 'gtdbtk.bac120.summary.tsv' respectively.
 
