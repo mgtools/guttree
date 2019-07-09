@@ -9,13 +9,16 @@
 
 ### Prerequisite Programs needed to run the pipeline:
 
-* Frag Gene Scan (FGS)
-* HMMER3
-* Bowtie2
 * python3
 * required python packages:
     * biopython
     * ete3
+* Frag Gene Scan (FGS)
+* HMMER3
+* Bowtie2
+* MUSCLE
+* FastTree
+
     
 Click [here](#setting-up-required-programs-and-packages) for details about installing/setting up prerequisites.
 
