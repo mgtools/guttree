@@ -1,10 +1,26 @@
 ## Human_Gut_Tree
+
 ### git hub repository for human gut tree project
 
 * The repository will contain a full pipeline of building a bacterial tree of life starting from contigs and or binned genomes all the way to a tree in newick format.
 * This github will also include helper scripts to annotae the tree (and the steps involved in annotating the tree)
 * scripts needed to generate label files used in the metaproteomic application
 * scripts needed to generate label files used in metagenomic aapplication
+
+### Prerequisite Programs needed to run the pipeline:
+
+* BBMap
+* Megahit
+* Frag Gene Scan (FGS)
+* HMMER3
+* Bowtie2
+* CD-HIT
+* python3
+* required python packages:
+    * biopython
+    * ete3
+    
+Click [here](#setting-up-required-programs-and-packages) for details about installing/setting up prerequisites.
 
 ### Buidling phylogenetic Tree by marker profile distance averaging method
 In this section we will describe the steps and the code used to build a phylogenetic tree given list of contigs. The algorithm starts from a set of contigs or genomes (depending on the completeness of your datasets) to a phylogenetic tree representing these contigs. The main steps involved for this pipeline is as follows:
@@ -208,4 +224,4 @@ python3 annotateTreeParents.py ../../data/combinedTree/allPfamsAveraged_treeDist
 
 
 
-
+## Setting up required programs and packages
