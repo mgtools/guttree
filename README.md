@@ -304,7 +304,12 @@ export PATH="/path/to/FastTree:$PATH"
     * Matplotlib
     * Numpy
     * Scipy
-    
+* Prodigal
+* pplacer
+* FastANI
+* FastTree
+* GTDBTK
+
 Click [here](#setting-up-GTDBTK) for details about installing/setting up prerequisites.
 
 
@@ -326,3 +331,51 @@ conda install -c anaconda scipy
 
 ```
 
+#### Prodigal
+
+to install Prodigal follow these steps:
+```
+git clone https://github.com/hyattpd/Prodigal.git.
+cd Prodigal
+make install
+make install
+```
+
+#### installing pplacer
+
+to install pplacer we need to install a number of other packages first:
+
+```
+wget https://github.com/matsen/pplacer/releases/download/v1.1.alpha19/pplacer-linux-v1.1.alpha19.zip
+unzip the folder
+make sure to add the directory into the path variable
+```
+
+#### installing FastANI
+
+instructions:
+```
+git clone https://github.com/ParBLiSS/FastANI.git
+cd FastANI
+./configure
+make  (note that when making the binaries, this might throw an error depending on the version of your g++, make sure you have a gcc compiler version 5 or newer)
+```
+
+#### FastTree
+
+download FastTree exectuable and add it's directory to the path variable.
+
+#### GTDBTK
+
+download and install GTDBTK.
+
+data needed to be downloaded:
+```
+wget https://data.ace.uq.edu.au/public/gtdb/data/releases/release89/89.0/gtdbtk_r89_data.tar.gz
+tar xvzf gtdbtk_r89_data.tar.gz
+wget https://data.ace.uq.edu.au/public/gtdbtk
+
+```
+installing the package:
+
+pip install gtdbtk
