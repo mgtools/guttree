@@ -294,3 +294,35 @@ chmod +x /path/to/FastTree/FastTree
 add the path to FastTree to the $PATH variable in ~/.bashrc file
 export PATH="/path/to/FastTree:$PATH"
 ```
+
+### Prerequisite Programs needed to run the GTDBTK to annotate species:
+
+* python2
+* required python packages:
+    * dendropy
+    * future
+    * Matplotlib
+    * Numpy
+    * Scipy
+    
+Click [here](#setting-up-GTDBTK) for details about installing/setting up prerequisites.
+
+
+## Setting up GTDBTK
+#### Python2 and Anaconda2
+Installing python3 through anaconda suite, will install alot ofthe python packages used and will make it easy to install additional packages through conda. Anaconda3 package could be obtained through:
+```
+wget https://repo.anaconda.com/archive/Anaconda2-2019.03-Linux-x86_64.sh
+sh Anaconda2-2019.03-Linux-x86_64.sh
+and then follow the installation instructions.
+```
+to install pyhton2 packages:
+```
+conda install -c bioconda dendropy
+pip install future
+conda install -c conda-forge matplotlib
+conda install -c anaconda numpy 
+conda install -c anaconda scipy 
+
+```
+
