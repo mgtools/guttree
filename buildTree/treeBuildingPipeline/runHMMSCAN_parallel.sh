@@ -30,4 +30,4 @@ n="${#files[@]}"
 
 for y in $(eval echo "{0..$n}");
 do
-   printf "%s\0"  "${files[$y]}"; done| xargs -0 -I @@ -P $n_threads sh testCommand.sh -i @@ -o $out_dir -m $marker_profiles
+   printf "%s\0"  "${files[$y]}"; done| xargs -0 -I @@ -P $n_threads sh runHMMSCANcommand.sh -i @@ -o $out_dir -m $marker_profiles
