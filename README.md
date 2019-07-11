@@ -104,6 +104,12 @@ After having taxonomica information for the leaf nodes (i.e. out species) and af
 2) file to the final rooted phylogenetic tree containing all species.
 3) directory to the output to store the node to LCA maps.
 
+Example to run the script:
+
+```
+python3 nodes2LCA_maps.py ../data/allBin2taxon_dic.json ../data/combinedTree/allPfamsAveraged_treeDist_clean_internalNodesNamed_rooted.outtree ../data/
+```
+
 
 ### ---------------------Detail explanation of the steps mentioned above-----------------------------
 
