@@ -63,12 +63,21 @@ python3 convert2phylip10Padding.py $data_dir'/pfam_FastTree_treeDist/allPfamsAve
 
 if [ -f 'outfile' ]; then
     rm -r outfile
-    rm -r outtree
-    rm $tree_dir
-    mkdir $tree_dir
 fi
 
-neighbor < neighbor_cmds.txt > screenout &
+if [ -f 'outtree' ]; then
+    rm -r outtree
+if
+
+if [ -d $tree_dir ]; then
+    rm $tree_dir
+fi
+
+mkdir $tree_dir
+
+echo 'Constructing a phylogenetic tree using all genomes through neoighborhood joining method...'
+
+neighbor < neighbor_cmds.txt
 
 mv outfile $tree_dir'allPfamsAveraged_treeDist.outfile'
 mv outtree $tree_dir'allPfamsAveraged_treeDist.outtree'
