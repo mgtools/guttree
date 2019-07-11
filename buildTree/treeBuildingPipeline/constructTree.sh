@@ -86,7 +86,7 @@ mv allPfamsAveraged_treeDist_padded.phylip $distMat_dir
 
 python3 mapBackTreeLeafNames.py $data_dir'allPfamsAveraged_treeDist_padded_number2bin_dic.json' $tree_dir'allPfamsAveraged_treeDist.outtree'
 
-python3 annotateTreeParents.py $tree_dir'allPfamsAveraged_treeDist.outtree' $tree_dir
+python3 annotateTreeParents.py $tree_dir'allPfamsAveraged_treeDist_clean.outtree' $tree_dir
 
 END=$(date +%s)
 DIFF=$(( $END - $START ))
