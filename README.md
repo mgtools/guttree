@@ -93,7 +93,7 @@ python3 unifyGenomeExtensions.py ../../sample_genomes/
 ```
 
 It is essential that we have a list of genes for the genomes of interest to extract marker gene information later to build the tree. Here we use FragGeneScan (FGS) in order to predict the protein coding genes.
-To predict genes we made a [script](buildTree/treeBuidlingPipeline/runFGS_parallel.sh), 'runFGS_parallel.sh' that calls FragGeneScan over all the contigs specified in a particular folder. This will execute FragGeneScan in parallel treating each genome/bin independantly, it will scale as much as the specified number of cores. This script takes four command line arguments:
+To predict genes we made a [script](buildTree/treeBuildingPipeline/runFGS_parallel.sh), 'runFGS_parallel.sh' that calls FragGeneScan over all the contigs specified in a particular folder. This will execute FragGeneScan in parallel treating each genome/bin independantly, it will scale as much as the specified number of cores. This script takes four command line arguments:
 
 1) input directory containing all contigs
 2) number of threads used by the program.
@@ -112,7 +112,7 @@ sh runFGS_parallel.sh -i ../../sample_genomes -t 40 -o ../../data/sample_genomes
 #### Searching for marker gene profile matches within the predicted proteins
 The next step after gene prediction would be to scan marker gene profiles against proteins of these genes. Since we use FGS for the task of gene prediction, it also produces the translated protein sequences of these genes. 
 These produced protein sequences are used to scan (search) these marker gene profiles against them. I have predefined marker gene profiles and a precompiled hmmer database which I am including with this github. The list of pfam profiles can be found [here](buildTree/treeBuildingData/ribosomal_GTP_EFTU_pfamIDs_list.txt) and the hmmer3 database is found [here](buildTree/treeBuildingData/ribosmal_GTP_EFTU_pfam_db/)
-To search for significant hits betwen sequences and these predefined profiles hmmscan function from Hmmer3 is used. To do this we made the following script [script](buildTree/treeBuidlingPipeline/runHMMSCAN_parallel.sh), 'runHMMSCAN_parallel.sh'. This will call hmmscan function of hmmer, and will produce two files per scanned proteome file in this case, one is a tabular file and another is a human readable file at an output folder specified by the output parameter. This script takes five command line arguments:
+To search for significant hits betwen sequences and these predefined profiles hmmscan function from Hmmer3 is used. To do this we made the following script [script](buildTree/treeBuildingPipeline/runHMMSCAN_parallel.sh), 'runHMMSCAN_parallel.sh'. This will call hmmscan function of hmmer, and will produce two files per scanned proteome file in this case, one is a tabular file and another is a human readable file at an output folder specified by the output parameter. This script takes five command line arguments:
 
 1) input directory containing protein sequences in fasta format
 2) number of threads used by the program.
