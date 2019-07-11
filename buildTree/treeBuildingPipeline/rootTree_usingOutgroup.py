@@ -61,4 +61,4 @@ else:
             node.name = 'P'+str(parent_count)
             parent_count += 1
     
-    tree.write(outfile = tree_in_f.split('.')[0]+'_rooted.outtree', format = 1)
+    tree.write(outfile = tree_in_f.rsplit('.', 1)[0]+'_rooted.outtree', format = 1)
