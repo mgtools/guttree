@@ -74,7 +74,7 @@ After running the GTDBTK program over our genomes, we will obtain two taxonomica
 
 1) bacterial taxonmic assignment file
 2) archaea taxonomic assignment file
-3) output directory to store the this dictionary mapping.
+3) output directory to store the this dictionary mapping between bin IDs to taxonomies.
 
 Example to run the scrip:
 
