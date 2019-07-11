@@ -69,18 +69,33 @@ gtdbtk classify_wf --cpus 64 --genome_dir final_genomes/ --extension fasta --out
 ```
 where we specified the folder where all of these genomes/bins are found in fasta format, and the output directory for the generated files to be stored plus number of CPUs used. This command will generate different taxonomical assignment files for the different kingdoms. i.e. Archaea and Bacteria in our case. These files are called 'gtdbtk.ar122.summary.tsv' and 'gtdbtk.bac120.summary.tsv' respectively.
 
-#### Bin/genome IDs to taxonomical mappings
+#### Bin IDs to taxonomical mappings
 After running the GTDBTK program over our genomes, we will obtain two taxonomical assignments once for bacteria and the other for archaea. We made a script that will combine these two outputs and generate a dictionary mapping, that maps between the bin IDs to the different taxonomical levels assigned to that bing or genome ID, i,e, starting to phylum all the way to species level taxonomic assignments, if that information is available. This resulting dictionary will be used later to annotate and creat labels for the tree. The script is found [here](assignTaxonomies/bins2taxonomic_assignment_GTDBTK.py). This script requires three command line arguments:
 
 1) bacterial taxonmic assignment file
 2) archaea taxonomic assignment file
 3) output directory to store the this dictionary mapping between bin IDs to taxonomies.
 
-Example to run the scrip:
+Example to run the script:
 
 ```
 python3 bins2taxonomic_assignment_GTDBTK.py ../data/final_genomes.classify_wf/gtdbtk.bac120.summary.tsv ../data/final_genomes.classify_wf/gtdbtk.ar122.summary.tsv ../data/
 ```
+
+#### Bin IDs to taxonomical mappings
+
+After obtaining bin ID to taxonomic assignments, now we can start with annotating and coloring the tree at different taxonomicla levels. To do that we made a script called [extractSpecificLevelAnnotation.py](assignTaxonomies/extractSpecificLevelAnnotation.py). This script requires three command line arguments to run:
+
+1) First command line argument is a dictionary mapping between bin IDs to different levels of taxonomic assignments, i.e. species, genus, order etc...
+2) Second command line argument is the level at which the annotation is to be extractesd i.e. phylum class etc...
+3) Third input is the output diretory to store the generated files.
+
+Example to run the script:
+
+```
+python3 extractSpecificLevelAnnotation.py ../data/allBin2taxon_dic.json phylum ../data/
+```
+
 
 ### ---------------------Detail explanation of the steps mentioned above-----------------------------
 
