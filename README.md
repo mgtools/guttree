@@ -96,6 +96,14 @@ Example to run the script:
 python3 extractSpecificLevelAnnotation.py ../data/allBin2taxon_dic.json phylum ../data/
 ```
 
+#### Annotating internal parent nodes (LCA approach)
+
+After having taxonomica information for the leaf nodes (i.e. out species) and after having constucted a phylogenetic tree composed of all these species, we can propagate the taxonomic information to the internal parent nodes using the tree topology and the information present at the leaf nodes by least common ancestors approach. To do this we wrote a script called ['nodes2LCA_maps.py'](assignTaxonomies/nodes2LCA_maps.py). THis script takes three arguments to runL
+
+1) mapping dictionary file between bin IDs to taxonomies.
+2) file to the final rooted phylogenetic tree containing all species.
+3) directory to the output to store the node to LCA maps.
+
 
 ### ---------------------Detail explanation of the steps mentioned above-----------------------------
 
