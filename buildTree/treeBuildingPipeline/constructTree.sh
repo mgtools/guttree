@@ -11,6 +11,7 @@ START=$(date +%s)
 n_cores=40
 data_dir='../../data/'
 tree_dir='../../data/combinedTree/'
+distMat_dir='../../data/pfam_FastTree_treeDist/'
 
 while getopts i:t: option
 do
@@ -39,9 +40,9 @@ pfam_db=../treeBuildingData/ribosmal_GTP_EFTU_pfam_db/ribosomal_GTP_EFTU_profile
 
 python3 unifyGenomeExtensions.py $genomes_directory 
 
-sh runFGS_parallel.sh -i $genomes_directory -t $n_cores -o $FGSFolder
+sh runFGS.sh -i $genomes_directory -t $n_cores -o $FGSFolder
 
-sh runHMMSCAN_parallel.sh -i $FGSFolder -t $n_cores -o $HMMSCAN_outFolder -m $pfam_db -e .faa
+sh runHMMSCAN_parllel.sh -i $FGSFolder -t $n_cores -o $HMMSCAN_outFolder -m $pfam_db -e .faa
 
 python3 extractPfamSeqHits.py $HMMSCAN_outFolder $n_cores $data_dir
 
@@ -53,13 +54,13 @@ sh get_MSA_parallel.sh -i $data_dir'bin2bestPfam_seqs/' -t $n_cores -o $data_dir
 
 sh get_FastTree_parallel.sh -i $data_dir'pfam_MSA/' -t $n_cores -o $data_dir'pfam_FastTree/'
 
-Rscript cophenetic_phylo.R $data_dir'pfam_FastTree/' $data_dir'pfam_FastTree_treeDist/'
+Rscript cophenetic_phylo.R $data_dir'pfam_FastTree/' $distMat_dir
 
-python3 combTreeDistMats.py $data_dir'pfam_FastTree_treeDist/'
+python3 combTreeDistMats.py $distMat_dir
 
-python3 dfMat2phylip.py $data_dir'pfam_FastTree_treeDist/allPfamsAveraged_treeDist.txt'
+python3 dfMat2phylip.py $distMat_dir'allPfamsAveraged_treeDist.txt'
 
-python3 convert2phylip10Padding.py $data_dir'/pfam_FastTree_treeDist/allPfamsAveraged_treeDist.phylip' $data_dir
+python3 convert2phylip10Padding.py $distMat_dir'allPfamsAveraged_treeDist.phylip' $data_dir
 
 if [ -f 'outfile' ]; then
     rm -r outfile
@@ -67,10 +68,10 @@ fi
 
 if [ -f 'outtree' ]; then
     rm -r outtree
-if
+fi
 
 if [ -d $tree_dir ]; then
-    rm $tree_dir
+    rm -r $tree_dir
 fi
 
 mkdir $tree_dir
@@ -81,6 +82,7 @@ neighbor < neighbor_cmds.txt
 
 mv outfile $tree_dir'allPfamsAveraged_treeDist.outfile'
 mv outtree $tree_dir'allPfamsAveraged_treeDist.outtree'
+mv allPfamsAveraged_treeDist_padded.phylip $distMat_dir
 
 python3 mapBackTreeLeafNames.py $data_dir'allPfamsAveraged_treeDist_padded_number2bin_dic.json' $tree_dir'allPfamsAveraged_treeDist.outtree'
 

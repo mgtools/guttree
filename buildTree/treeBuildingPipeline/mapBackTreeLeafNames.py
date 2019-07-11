@@ -31,5 +31,5 @@ else:
     for leaf in tree.get_terminals():
         leaf.name = map_dic[leaf.name]
     
-    with open(tree_f[:tree_f.rfind('.')]+'_clean.outtree', 'w') as out_f:
+    with open(tree_f.rsplit('.', 1)[0]+'_clean.outtree', 'w') as out_f:
         Phylo.write(tree, out_f, 'newick')

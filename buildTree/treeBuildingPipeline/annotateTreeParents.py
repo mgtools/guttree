@@ -35,6 +35,6 @@ else:
             parent_counter += 1
     
     #tree.name = 'root'                
-    tree.write(format = 1, outfile = tree_in_f.split('.')[0]+'_internalNodesNamed.outtree')
+    tree.write(format = 1, outfile = tree_in_f.rsplit('.', 1)[0]+'_internalNodesNamed.outtree')
     
     open(out_dir+'leaves.txt', 'w').write('\n'.join([item.name for item in tree.get_descendants()]))
