@@ -57,7 +57,7 @@ This script will also prompt the used to input the genome or bin IDs for the gen
 
 Example to run this script:
 ```
-pyhton3 rooTree_usingOutgroup.py ../../data/combinedTree/allPfamsAveraged_treeDist.outtree ../../data/
+pyhton3 rooTree_usingOutgroup.py ../../data/combinedTree/allPfamsAveraged_treeDist_clean_internalNodesNamed.outtree ../../data/combinedTree/
 ```
 
 ### Taxonomic assignment using GTDBTK
