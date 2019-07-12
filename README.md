@@ -110,6 +110,31 @@ Example to run the script:
 python3 nodes2LCA_maps.py ../data/allBin2taxon_dic.json ../data/combinedTree/allPfamsAveraged_treeDist_clean_internalNodesNamed_rooted.outtree ../data/
 ```
 
+#### Tree Coloring and legend labels
+
+Now that we have a tree whose internal nodes are also named, and we also extracted internal nodes to least common ancestors mappings we can assign different colors to different clades depedning on the taxonomic levels that we want to label, i.e. phylum, class etc... To do that we made two scripts, the first one [make_iTOLcolorStylesFile.py](assignTaxonomies/make_iTOLcolorStylesFile.py) that takes 4 command line arguments and outputs and iTOL node coloring file that can be imported to the displayed tree by a simple drag and drop, the 4 command line arguments for this script are:
+
+1) taxonomic level to bin taxa mapping dictionary
+2) taxonomic level to color mappings dictionary
+3) specificed taxonomic level
+4) dictectory to the output
+
+The second script we made creates and iTOL legend file for the tree colors, this is done through the script [make_iTOLColorLegendFile.py](assignTaxonomies/make_iTOLColorLegendFile.py), that also takes 4 command line arguments:
+
+1) taxonomic level to bin taxa mapping dictionary
+2) taxonomic level to color mappings dictionary
+3) specificed taxonomic level
+4) dictectory to the output
+
+The resulting iTOL importable text files could be imported to the constructed tree by a simple drag and drop to the browser.
+
+example to run these scripts:
+
+```
+python3 make_iTOLcolorStylesFile.py ../data/phylum_LevelAllBin2TaxaMap_dic.json ../data/phylum_allTaxa2colorMap_dic.json phylum ../assignTaxonomies/
+
+python3 make_iTOLColorLegendFile.py ../data/phylum_LevelAllBin2TaxaMap_dic.json ../data/phylum_allTaxa2colorMap_dic.json phylum ../assignTaxonomies/ 
+```
 
 ### ---------------------Detail explanation of the steps mentioned above-----------------------------
 
