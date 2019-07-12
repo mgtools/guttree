@@ -136,6 +136,20 @@ python3 make_iTOLcolorStylesFile.py ../data/phylum_LevelAllBin2TaxaMap_dic.json 
 python3 make_iTOLColorLegendFile.py ../data/phylum_LevelAllBin2TaxaMap_dic.json ../data/phylum_allTaxa2colorMap_dic.json phylum ../assignTaxonomies/ 
 ```
 
+#### Tree node labels and pop-up information
+
+If the user is intersted to view the entire taxonomical hierarchy of any node within the tree we made a script that generates two iTOL importable files, this script could be found [here](assignTaxonomies/make_iTOL_node_mostSpecificTaxaAssignment_labels.py), which takes 3 command line arguments to run:
+
+1) tree file in newick format
+2) al nodes to taxonomic assignment dictionary map file
+3) output folder to dump generated files
+
+example to run this script
+
+```
+python3 make_iTOL_node_mostSpecificTaxaAssignment_labels.py ../data/combinedTree/allPfamsAveraged_treeDist_clean_internalNodesNamed_rooted.outtree ../data/allNodes2taxon_dic.json ../assignTaxonomies/
+```
+
 ### ---------------------Detail explanation of the steps mentioned above-----------------------------
 
 #### Prediction protien coding genes from contigs or genomes
