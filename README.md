@@ -22,7 +22,7 @@
     
 Click [here](#setting-up-required-programs-and-packages) for details about installing/setting up prerequisites.
 
-### Buidling phylogenetic Tree by marker profile distance averaging method
+### Buidling Phylogenetic Tree by marker profile distance averaging method
 In this section we will describe the steps and the code used to build a phylogenetic tree given list of contigs. The algorithm starts from a set of contigs or genomes (depending on the completeness of your datasets) to a phylogenetic tree representing these contigs. The main steps involved for this pipeline is as follows:
 
 * [Prediction protien coding genes from contigs or genomes](#prediction-protien-coding-genes-from-contigs-or-genomes)
@@ -46,6 +46,8 @@ sh constructTree.sh -i ../../genomes_dir/ -t 40
 
 An overview of the pipeline is summarized in this figure:
 ![GitHub Logo](buildTree/tree_building_pipeline.png)
+
+For details about all the steps involved we refer the user [here](#buidling-phylogenetic-tree)
 
 ### Rooting the phylogenetic tree using an outgroup
 In order to root out phylogenetic tree properly and to have two branches coming from the root node, we need to define an outgroup and use it to root the tree. In our bacterial tree of life example we used a set of 7 Archaea genomes whose most specific common ancestor was used as the outgroup clade. To do this we created a script called ['rootTree_usingOutgroup.py'](buildTree/treeBuildingPipeline/rootTree_usingOutgroup.py). Note that this step requires manual intervention because we need the user to spceify the outgroup genomes based on genome data used. This script requires two arguments to run:
@@ -150,7 +152,11 @@ example to run this script
 python3 make_iTOL_node_mostSpecificTaxaAssignment_labels.py ../data/combinedTree/allPfamsAveraged_treeDist_clean_internalNodesNamed_rooted.outtree ../data/allNodes2taxon_dic.json ../assignTaxonomies/
 ```
 
-### ---------------------Detail explanation of the steps mentioned above-----------------------------
+### ----------------Detail explanation of the scripts involved in the different pipelines mentioned above--------------------------
+
+In this section we provide details of every script and every step involved in the different pipelines explained above, in case the user wants to understand and/or modify some of the steps.
+
+### Buidling Phylogenetic Tree
 
 #### Prediction protien coding genes from contigs or genomes
 Before we start with the gene prediction we made a small helper script that will unify the genome extensions in case your genomes come from multiple sources with different extensions, this will help to be able to split genome IDs for later. The script used for that can be found [here](buildTree/treeBuildingPipeline/unifyGenomeExtensions.py). To run this script you need to specify one command line argument which is the directory where you stored the genomes. It will overwrite the same directory by using '.fasta' as the file extension.
