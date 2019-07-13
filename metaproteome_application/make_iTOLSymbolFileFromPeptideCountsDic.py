@@ -28,7 +28,7 @@ import pandas as pd
 #sample_name = 'allBins'
 
 if len(sys.argv) != 4:
-    print('please specify three command line arguments, example to run this script i.e.\n python3 make_iTOLSymbolFileFromPeptideCountsDic.py dir/2/node2taxon_dic_f dir/2/peptide2genome_dic_f /dir/to/output/file')
+    print('please specify three command line arguments, example to run this script i.e.\n python3 make_iTOLSymbolFileFromPeptideCountsDic.py dir/2/node2taxon_dic_f dir/2/nodeName2NpeptidesMapped_dic /dir/to/output/file')
 
 else:
     

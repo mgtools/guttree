@@ -68,22 +68,23 @@ else:
         peptide = str(peptide_seqs[peptide_id].seq)
         #peptide = row['peptide']
         protein_id = row['protein_match_ID']
-        genome_id = proteins2genomesFnames_dic[protein_id]
-        #if 'GCF_' in genome_id:
-        #   genome_id = '_'.join(genome_id.split('_')[:2])
-        if peptide in unipeptS7Peptides2allGenomes_dic:
-            unipeptS7Peptides2allGenomes_dic[peptide].append(genome_id)
-        else:
-            unipeptS7Peptides2allGenomes_dic[peptide] = [genome_id]
-        if genome_id in allGenomes2unipeptS7Peptides_dic:
-            allGenomes2unipeptS7Peptides_dic[genome_id].append(peptide)
-        else:
-            allGenomes2unipeptS7Peptides_dic[genome_id] = [peptide]
+        if protein_id in proteins2genomesFnames_dic:
+            genome_id = proteins2genomesFnames_dic[protein_id]
+            #if 'GCF_' in genome_id:
+            #   genome_id = '_'.join(genome_id.split('_')[:2])
+            if peptide in unipeptS7Peptides2allGenomes_dic:
+                unipeptS7Peptides2allGenomes_dic[peptide].append(genome_id)
+            else:
+                unipeptS7Peptides2allGenomes_dic[peptide] = [genome_id]
+            if genome_id in allGenomes2unipeptS7Peptides_dic:
+                allGenomes2unipeptS7Peptides_dic[genome_id].append(peptide)
+            else:
+                allGenomes2unipeptS7Peptides_dic[genome_id] = [peptide]
     
     #####map the genomes mapped to peptides to their taxonomic assignments
     unipeptS7Peptides2allGenomes2taxonomies_dic_of_dic = dict()
     unmapped = list()
-    
+   
     for peptide in unipeptS7Peptides2allGenomes_dic:
         genomes = unipeptS7Peptides2allGenomes_dic[peptide]
         genomes2taxa_dic = dict()
@@ -97,6 +98,7 @@ else:
     
     unipeptS7Peptides2allGenomes_dic = dict()
     
+
     for peptide in unipeptS7Peptides2allGenomes2taxonomies_dic_of_dic:
         genome2taxonomies = unipeptS7Peptides2allGenomes2taxonomies_dic_of_dic[peptide]
         genomes = list(genome2taxonomies.keys())

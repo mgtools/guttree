@@ -6,7 +6,7 @@ reporting these matches.
 this script requires three command line arguments
 the first argument being the file that has the peptides to be searched in fasta format
 these peptides could be obtained by any peptide searching methods such as MSGF+ or some other way
-second command line argument is the file containing all the proteins coming fromall the genomes
+second command line argument is the file containing all the proteins coming from all the genomes
 I pre-compiled a file by predicting from all the contigs the protein coding genes and then translating these
 genes into their relative amino acid sequences. If you have not done so you need to precomple such a file
 before runing this script
