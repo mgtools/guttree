@@ -103,7 +103,7 @@ The scripts explained in this section require a dictionary mapping between prote
 
 example to run this script:
 ```
-python3 proteins2genomes.py ../data/final_genomes.FGS/ .fasta.FGS.faa ../metaproteome_application 
+python3 proteins2genomes.py ../data/final_genomes.FGS/ .fasta.FGS.faa ../metaproteome_application/
 ```
 
 #### Peptide to protein search
