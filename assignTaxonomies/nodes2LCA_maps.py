@@ -34,8 +34,6 @@ else:
     tree_in_f = sys.argv[2]
     out_dir = sys.argv[3]
     
-    #out_dir = tree_in_f.rsplit('/')[0]+'/'
-    
     with open(bin2taxon_dic_f, 'r') as in_f:
         bin2taxon_dic = json.load(in_f)
         

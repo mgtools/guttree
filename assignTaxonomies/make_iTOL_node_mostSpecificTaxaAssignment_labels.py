@@ -58,7 +58,8 @@ else:
             return 'NA', 'NA'
                 
     
-    with open(out_dir+'/'+'allNodes_labels.txt', 'w') as out_f:
+    #with open(out_dir+'/'+'allNodes_labels.txt', 'w') as out_f:
+    with open(out_dir+'/'+'allNodes_labels_noNumbers.txt', 'w') as out_f:
         out_f.write('LABELS\n')
         out_f.write('SEPARATOR TAB\n')
         out_f.write('\n')
@@ -68,7 +69,8 @@ else:
             print(level, mostSpecificTaxon)
             node = nodeName2Node_dic[genome]
             n_leaves = len(node.get_leaves())
-            out_f.write(genome+'\t'+level+': '+mostSpecificTaxon+' ('+str(n_leaves)+')\n')
+            #out_f.write(genome+'\t'+level+': '+mostSpecificTaxon+' ('+str(n_leaves)+')\n')
+            out_f.write(genome+'\t'+mostSpecificTaxon + '\n')
     
     
     with open(out_dir+'/'+'allNodes_popupInfo.txt', 'w') as out_f:

@@ -21,16 +21,12 @@ import os
 import sys
 
 
-
-all_taxa_f = 'bins2taxonomic_assignment_gtdbtk/allBin2taxon_dic_mergedABC_withARCHAEA_dic.json'
-
 if len(sys.argv) != 4:
     print('please enter 3 command line argument1 to run this script, i.e. example to run\n python3 extractSpecifcLevelAnnotation.py bins/2/taxa/map/file annotate_level dir/to/output/directory/')
 
 else:
 
     all_taxa_f = sys.argv[1]
-    #out_dir = hbc_taxa_f.rsplit('/', 1)
     out_dir = sys.argv[3]
     if os.path.isdir(out_dir) == False:
         os.mkdir(out_dir)
@@ -38,7 +34,7 @@ else:
     level = sys.argv[2]
     
     with open(all_taxa_f, 'r') as in_f:
-        allBin2taxon_dic_mergedABC_withARCHAEA_dic = json.load(in_f)
+        allBin2taxon_dic = json.load(in_f)
         
     def getBin2TaxaMap_dic(hbc_taxa_dic, NCBI_taxa_dic, umgs_taxa_dic, level):
         taxa2singleChar_dic = {
@@ -82,7 +78,7 @@ else:
         
         return levelBin2TaxaMap_dic
     
-    def getAllBins2TaxaMap_dic(allBin2taxon_dic_mergedABC_withARCHAEA_dic, level):
+    def getAllBins2TaxaMap_dic(allBin2taxon_dic, level):
         taxa2singleChar_dic = {
                                'kingdom':'d',
                                'phylum':'p',
@@ -97,11 +93,11 @@ else:
         
         levelBin2TaxaMap_dic = dict()
         
-        for binID in allBin2taxon_dic_mergedABC_withARCHAEA_dic:
-            taxa = allBin2taxon_dic_mergedABC_withARCHAEA_dic[binID]    
+        for binID in allBin2taxon_dic:
+            taxa = allBin2taxon_dic[binID]    
             if level_char in taxa:
-                if allBin2taxon_dic_mergedABC_withARCHAEA_dic[binID][level_char] != '':
-                    levelBin2TaxaMap_dic[binID] = allBin2taxon_dic_mergedABC_withARCHAEA_dic[binID][level_char]
+                if allBin2taxon_dic[binID][level_char] != '':
+                    levelBin2TaxaMap_dic[binID] = allBin2taxon_dic[binID][level_char]
                 else:
                     levelBin2TaxaMap_dic[binID] = 'NA'    
     
@@ -110,8 +106,7 @@ else:
     
     if __name__ == "__main__":
         
-        #levelBin2TaxaMap_dic = getBin2TaxaMap_dic(hbc_taxa_dic, NCBI_taxa_dic, umgs_taxa_dic, level)
-        levelBin2TaxaMap_dic = getAllBins2TaxaMap_dic(allBin2taxon_dic_mergedABC_withARCHAEA_dic, level)
+        levelBin2TaxaMap_dic = getAllBins2TaxaMap_dic(allBin2taxon_dic, level)
         
         all_taxa = list(set(list(levelBin2TaxaMap_dic.values())))
         all_taxa.sort()
