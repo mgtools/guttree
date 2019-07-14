@@ -84,7 +84,7 @@ Example to run the script:
 python3 bins2taxonomic_assignment_GTDBTK.py ../data/final_genomes.classify_wf/gtdbtk.bac120.summary.tsv ../data/final_genomes.classify_wf/gtdbtk.ar122.summary.tsv ../data/
 ```
 
-#### Bin IDs to taxonomical mappings
+#### Bin IDs to specific level taxonomical mappings
 
 After obtaining bin ID to taxonomic assignments, now we can start with annotating and coloring the tree at different taxonomicla levels. To do that we made a script called [extractSpecificLevelAnnotation.py](assignTaxonomies/extractSpecificLevelAnnotation.py). This script requires three command line arguments to run:
 
