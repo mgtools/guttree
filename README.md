@@ -62,95 +62,33 @@ Example to run this script:
 pyhton3 rooTree_usingOutgroup.py ../../data/combinedTree/allPfamsAveraged_treeDist_clean_internalNodesNamed.outtree ../../data/combinedTree/
 ```
 
-### Taxonomic assignment using GTDBTK
+### Tree annotation and Taxonomic assignment using GTDBTK
 
-Here we are using GTDBTK taxonomies to assign our genomes/bins with taxonomies using the least common ancestor approach. To do this we issue the following command:
+There are two steps involved in annotating the tree by assigning taxonomic classifications to the nodes and coloring different clades etc... The first step involves predicting the taxonomic classifcations using GTDBTK and the second step invovles using this information to annotate the tree. It's important to note that GTDBTK still runs on python2.x and not python3. Therefore the first step should be done by using a phython2 environment.
+
+We used GTDBTK taxonomies to assign our genomes/bins with taxonomies using the least common ancestor approach. To do this we issue the following command:
 
 ```
 gtdbtk classify_wf --cpus 64 --genome_dir final_genomes/ --extension fasta --out_dir data/final_genomes.classify_wf/
 ```
 where we specified the folder where all of these genomes/bins are found in fasta format, and the output directory for the generated files to be stored plus number of CPUs used. This command will generate different taxonomical assignment files for the different kingdoms. i.e. Archaea and Bacteria in our case. These files are called 'gtdbtk.ar122.summary.tsv' and 'gtdbtk.bac120.summary.tsv' respectively.
 
-#### Bin IDs to taxonomical mappings
-After running the GTDBTK program over our genomes, we will obtain two taxonomical assignments once for bacteria and the other for archaea. We made a script that will combine these two outputs and generate a dictionary mapping, that maps between the bin IDs to the different taxonomical levels assigned to that bing or genome ID, i,e, starting to phylum all the way to species level taxonomic assignments, if that information is available. This resulting dictionary will be used later to annotate and creat labels for the tree. The script is found [here](assignTaxonomies/bins2taxonomic_assignment_GTDBTK.py). This script requires three command line arguments:
+After obtaining taxanomic assignment information from the first step and having a phylogenetic tree using our pipeline, we can now proceed by annotating this tree. To do that we created a script called [annotate.sh](assignTaxonomies/annotate.sh) which executes all the steps necesarry to generate tree anotation files. This scritp requires 5 command line arguments:
 
-1) bacterial taxonmic assignment file
-2) archaea taxonomic assignment file
-3) output directory to store the this dictionary mapping between bin IDs to taxonomies.
+1) file for the archaea taxonomic annotations produced by GTDBTK
+2) file for the bacteria taxonomic annotations produced by GTDBTK
+3) output directory to store the generated files
+4) location for the generated phylogenetic tree file
+5) taxonomic level to generate annotatation files.
 
-Example to run the script:
-
-```
-python3 bins2taxonomic_assignment_GTDBTK.py ../data/final_genomes.classify_wf/gtdbtk.bac120.summary.tsv ../data/final_genomes.classify_wf/gtdbtk.ar122.summary.tsv ../data/
-```
-
-#### Bin IDs to specific level taxonomical mappings
-
-After obtaining bin ID to taxonomic assignments, now we can start with annotating and coloring the tree at different taxonomicla levels. To do that we made a script called [extractSpecificLevelAnnotation.py](assignTaxonomies/extractSpecificLevelAnnotation.py). This script requires three command line arguments to run:
-
-1) First command line argument is a dictionary mapping between bin IDs to different levels of taxonomic assignments, i.e. species, genus, order etc...
-2) Second command line argument is the level at which the annotation is to be extractesd i.e. phylum class etc...
-3) Third input is the output diretory to store the generated files.
-
-Example to run the script:
+Example to run this script:
 
 ```
-python3 extractSpecificLevelAnnotation.py ../data/allBin2taxon_dic.json phylum ../data/
+sh annotateTree.sh -a ../data/final_genomes.classify_wf/gtdbtk.ar122.summary.tsv -b ../data/final_genomes.classify_wf/gtdbtk.bac120.summary.tsv -o ../assignTaxonomies/ -p ../data/combinedTree/allPfamsAveraged_treeDist_clean_internalNodesNamed_rooted.outtree -l phylum
 ```
 
-#### Annotating internal parent nodes (LCA approach)
+Details about every step and all the scripts involved in annoating the phylogenetic tree could be found [here](#annotating-the-phylogenetic-tree)
 
-After having taxonomica information for the leaf nodes (i.e. out species) and after having constucted a phylogenetic tree composed of all these species, we can propagate the taxonomic information to the internal parent nodes using the tree topology and the information present at the leaf nodes by least common ancestors approach. To do this we wrote a script called ['nodes2LCA_maps.py'](assignTaxonomies/nodes2LCA_maps.py). THis script takes three arguments to runL
-
-1) mapping dictionary file between bin IDs to taxonomies.
-2) file to the final rooted phylogenetic tree containing all species.
-3) directory to the output to store the node to LCA maps.
-
-Example to run the script:
-
-```
-python3 nodes2LCA_maps.py ../data/allBin2taxon_dic.json ../data/combinedTree/allPfamsAveraged_treeDist_clean_internalNodesNamed_rooted.outtree ../data/
-```
-
-#### Tree Coloring and legend labels
-
-Now that we have a tree whose internal nodes are also named, and we also extracted internal nodes to least common ancestors mappings we can assign different colors to different clades depedning on the taxonomic levels that we want to label, i.e. phylum, class etc... To do that we made two scripts, the first one [make_iTOLcolorStylesFile.py](assignTaxonomies/make_iTOLcolorStylesFile.py) that takes 4 command line arguments and outputs and iTOL node coloring file that can be imported to the displayed tree by a simple drag and drop, the 4 command line arguments for this script are:
-
-1) taxonomic level to bin taxa mapping dictionary
-2) taxonomic level to color mappings dictionary
-3) specificed taxonomic level
-4) dictectory to the output
-
-The second script we made creates and iTOL legend file for the tree colors, this is done through the script [make_iTOLColorLegendFile.py](assignTaxonomies/make_iTOLColorLegendFile.py), that also takes 4 command line arguments:
-
-1) taxonomic level to bin taxa mapping dictionary
-2) taxonomic level to color mappings dictionary
-3) specificed taxonomic level
-4) dictectory to the output
-
-The resulting iTOL importable text files could be imported to the constructed tree by a simple drag and drop to the browser.
-
-example to run these scripts:
-
-```
-python3 make_iTOLcolorStylesFile.py ../data/phylum_LevelAllBin2TaxaMap_dic.json ../data/phylum_allTaxa2colorMap_dic.json phylum ../assignTaxonomies/
-
-python3 make_iTOLColorLegendFile.py ../data/phylum_LevelAllBin2TaxaMap_dic.json ../data/phylum_allTaxa2colorMap_dic.json phylum ../assignTaxonomies/ 
-```
-
-#### Tree node labels and pop-up information
-
-If the user is intersted to view the entire taxonomical hierarchy of any node within the tree we made a script that generates two iTOL importable files, this script could be found [here](assignTaxonomies/make_iTOL_node_mostSpecificTaxaAssignment_labels.py), which takes 3 command line arguments to run:
-
-1) tree file in newick format
-2) al nodes to taxonomic assignment dictionary map file
-3) output folder to dump generated files
-
-example to run this script
-
-```
-python3 make_iTOL_node_mostSpecificTaxaAssignment_labels.py ../data/combinedTree/allPfamsAveraged_treeDist_clean_internalNodesNamed_rooted.outtree ../data/allNodes2taxon_dic.json ../assignTaxonomies/
-```
 
 ### Metaproteomic Application of the gut tree
 In this section we will explain the scripts and the steps involved in demonstrating the practicaility of the tree in a metagenomics context. Here in this case we assume the user to provide a set of peptides that have been identified before. Searching and identifying peptides is beyond the scope of this study.
@@ -422,6 +360,91 @@ mv outtree ../../data/combinedTree/allPfamsAveraged_treeDist.outtree
 python3 mapBackTreeLeafNames.py ../../data/allPfamsAveraged_treeDist_padded_number2bin_dic.json ../../data/combinedTree/allPfamsAveraged_treeDist.outtree
 
 python3 annotateTreeParents.py ../../data/combinedTree/allPfamsAveraged_treeDist.outtree ../../data/combinedTree/
+```
+
+
+
+### Annotating the phylogenetic tree
+
+#### Bin IDs to taxonomical mappings
+After running the GTDBTK program over our genomes, we will obtain two taxonomical assignments once for bacteria and the other for archaea. We made a script that will combine these two outputs and generate a dictionary mapping, that maps between the bin IDs to the different taxonomical levels assigned to that bing or genome ID, i,e, starting to phylum all the way to species level taxonomic assignments, if that information is available. This resulting dictionary will be used later to annotate and creat labels for the tree. The script is found [here](assignTaxonomies/bins2taxonomic_assignment_GTDBTK.py). This script requires three command line arguments:
+
+1) bacterial taxonmic assignment file
+2) archaea taxonomic assignment file
+3) output directory to store the this dictionary mapping between bin IDs to taxonomies.
+
+Example to run the script:
+
+```
+python3 bins2taxonomic_assignment_GTDBTK.py ../data/final_genomes.classify_wf/gtdbtk.bac120.summary.tsv ../data/final_genomes.classify_wf/gtdbtk.ar122.summary.tsv ../data/
+```
+
+#### Bin IDs to specific level taxonomical mappings
+
+After obtaining bin ID to taxonomic assignments, now we can start with annotating and coloring the tree at different taxonomicla levels. To do that we made a script called [extractSpecificLevelAnnotation.py](assignTaxonomies/extractSpecificLevelAnnotation.py). This script requires three command line arguments to run:
+
+1) First command line argument is a dictionary mapping between bin IDs to different levels of taxonomic assignments, i.e. species, genus, order etc...
+2) Second command line argument is the level at which the annotation is to be extractesd i.e. phylum class etc...
+3) Third input is the output diretory to store the generated files.
+
+Example to run the script:
+
+```
+python3 extractSpecificLevelAnnotation.py ../data/allBin2taxon_dic.json phylum ../data/
+```
+
+#### Annotating internal parent nodes (LCA approach)
+
+After having taxonomica information for the leaf nodes (i.e. out species) and after having constucted a phylogenetic tree composed of all these species, we can propagate the taxonomic information to the internal parent nodes using the tree topology and the information present at the leaf nodes by least common ancestors approach. To do this we wrote a script called ['nodes2LCA_maps.py'](assignTaxonomies/nodes2LCA_maps.py). THis script takes three arguments to runL
+
+1) mapping dictionary file between bin IDs to taxonomies.
+2) file to the final rooted phylogenetic tree containing all species.
+3) directory to the output to store the node to LCA maps.
+
+Example to run the script:
+
+```
+python3 nodes2LCA_maps.py ../data/allBin2taxon_dic.json ../data/combinedTree/allPfamsAveraged_treeDist_clean_internalNodesNamed_rooted.outtree ../data/
+```
+
+#### Tree Coloring and legend labels
+
+Now that we have a tree whose internal nodes are also named, and we also extracted internal nodes to least common ancestors mappings we can assign different colors to different clades depedning on the taxonomic levels that we want to label, i.e. phylum, class etc... To do that we made two scripts, the first one [make_iTOLcolorStylesFile.py](assignTaxonomies/make_iTOLcolorStylesFile.py) that takes 4 command line arguments and outputs and iTOL node coloring file that can be imported to the displayed tree by a simple drag and drop, the 4 command line arguments for this script are:
+
+1) taxonomic level to bin taxa mapping dictionary
+2) taxonomic level to color mappings dictionary
+3) specificed taxonomic level
+4) dictectory to the output
+
+The second script we made creates and iTOL legend file for the tree colors, this is done through the script [make_iTOLColorLegendFile.py](assignTaxonomies/make_iTOLColorLegendFile.py), that also takes 4 command line arguments:
+
+1) taxonomic level to bin taxa mapping dictionary
+2) taxonomic level to color mappings dictionary
+3) specificed taxonomic level
+4) dictectory to the output
+
+The resulting iTOL importable text files could be imported to the constructed tree by a simple drag and drop to the browser.
+
+example to run these scripts:
+
+```
+python3 make_iTOLcolorStylesFile.py ../data/phylum_LevelAllBin2TaxaMap_dic.json ../data/phylum_allTaxa2colorMap_dic.json phylum ../assignTaxonomies/
+
+python3 make_iTOLColorLegendFile.py ../data/phylum_LevelAllBin2TaxaMap_dic.json ../data/phylum_allTaxa2colorMap_dic.json phylum ../assignTaxonomies/ 
+```
+
+#### Tree node labels and pop-up information
+
+If the user is intersted to view the entire taxonomical hierarchy of any node within the tree we made a script that generates two iTOL importable files, this script could be found [here](assignTaxonomies/make_iTOL_node_mostSpecificTaxaAssignment_labels.py), which takes 3 command line arguments to run:
+
+1) tree file in newick format
+2) al nodes to taxonomic assignment dictionary map file
+3) output folder to dump generated files
+
+example to run this script
+
+```
+python3 make_iTOL_node_mostSpecificTaxaAssignment_labels.py ../data/combinedTree/allPfamsAveraged_treeDist_clean_internalNodesNamed_rooted.outtree ../data/allNodes2taxon_dic.json ../assignTaxonomies/
 ```
 
 
