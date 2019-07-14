@@ -73,7 +73,7 @@ gtdbtk classify_wf --cpus 64 --genome_dir final_genomes/ --extension fasta --out
 ```
 where we specified the folder where all of these genomes/bins are found in fasta format, and the output directory for the generated files to be stored plus number of CPUs used. This command will generate different taxonomical assignment files for the different kingdoms. i.e. Archaea and Bacteria in our case. These files are called 'gtdbtk.ar122.summary.tsv' and 'gtdbtk.bac120.summary.tsv' respectively.
 
-After obtaining taxanomic assignment information from the first step and having a phylogenetic tree using our pipeline, we can now proceed by annotating this tree. To do that we created a script called [annotate.sh](assignTaxonomies/annotate.sh) which executes all the steps necesarry to generate tree anotation files. This scritp requires 5 command line arguments:
+After obtaining taxanomic assignment information from the first step and having a phylogenetic tree using our pipeline, we can now proceed by annotating this tree. To do that we created a script called [annotate.sh](assignTaxonomies/annotateTree.sh) which executes all the steps necesarry to generate tree anotation files. This scritp requires 5 command line arguments:
 
 1) file for the archaea taxonomic annotations produced by GTDBTK
 2) file for the bacteria taxonomic annotations produced by GTDBTK
