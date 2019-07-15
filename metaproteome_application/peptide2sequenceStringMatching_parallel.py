@@ -32,7 +32,7 @@ else:
     
     peptide_seqs = SeqIO.to_dict(SeqIO.parse(peptides_seq_f, 'fasta'))
     print('reading all proteins into memory')
-    all_prot_files = [file for file in os.listdir(prot_seqs_dir) if file.endswith('faa')]
+    all_prot_files = [file for file in os.listdir(prot_seqs_dir) if file.endswith('.fasta.FGS.faa')]
     
     peptide_seq_list = [(peptide_id ,str(peptide_seqs[peptide_id].seq)) for peptide_id in peptide_seqs]
     
