@@ -14,14 +14,12 @@ bins2taxonDic_f='../data/allBin2taxon_dic.json'
 allNodes2taxonDic_f='../data/allNodes2taxon_dic.json'
 tree_f='../data/combinedTree/allPfamsAveraged_treeDist_clean_internalNodesNamed_rooted.outtree'
 
-while getopts s:o:t:l: option
+while getopts s:o:: option
 do
 case "${option}"
 in
     s) sam_f=${OPTARG};;
     o) out_dir=${OPTARG};;
-    t) n_cores=${OPTARG};;
-    l) taxonomy_level=${OPTARG};;
 esac
 done
 
