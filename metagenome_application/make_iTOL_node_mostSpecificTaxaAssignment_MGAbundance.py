@@ -7,7 +7,7 @@ Created on Fri Jun 28 16:54:01 2019
 script in which it will take leaf nodes to taxa assignment dictionary and will create an
 iTOL importable file where it assigns all nodes (leaves and internal ones) to the most 
 sepcific taxonomical assignment possible also it will take a dictionary of genome to number 
-of peptides mapped to it and will display that in the label as well.
+of reads mapped to it and will display that in the label as well.
 
 this script requires five command line arguments.
 the first argument is the bacterial tree of life in newick format
@@ -29,12 +29,12 @@ import json
 import sys
 import pandas as pd
 
-tree_in_f = 'allBins_Archaea_61RibosomalGTP_EFTU_internalNodesNamed_pruned_rooted.outtree'
-Bin2taxon_clean_dic_f = '../bins2taxonomic_assignment_gtdbtk/allBin2taxon_dic_mergedABC_withARCHAEA_dic.json'
+#tree_in_f = 'allBins_Archaea_61RibosomalGTP_EFTU_internalNodesNamed_pruned_rooted.outtree'
+#Bin2taxon_clean_dic_f = '../bins2taxonomic_assignment_gtdbtk/allBin2taxon_dic_mergedABC_withARCHAEA_dic.json'
 
-allNodes2taxon_dic_f = '../allBinsWithArchaea_tree_averaging_annotation_GTDBTK/allNodes2taxon_dic.json'
+#allNodes2taxon_dic_f = '../allBinsWithArchaea_tree_averaging_annotation_GTDBTK/allNodes2taxon_dic.json'
 
-abundance_f = 'SRR769523_abundances.txt'
+#abundance_f = 'SRR769523_abundances.txt'
 
 if len(sys.argv) != 6:
     print('please enter 5 command line arguments, to run this script, i.e. example to run\n python3 make_iTOL_node_mostSpecificTaxaASsignment_MGAbundance.py dir/to/tree_f dir/to/bin2taxon/dic_f dir/to/allNodes2taxon/dic_f dir/to/abundanceTable_f dir/2/output/directory/')
@@ -95,6 +95,7 @@ else:
     for i, row in abundance_df.iterrows():
         genome = row['genome_id']
         total_abundance = row['total_abundance_pmkb']
+        genome = genome.rsplit('.', 1)[0]
         bin2abundance_dic[genome] = total_abundance
     
     total_abundance = sum(bin2abundance_dic.values())
