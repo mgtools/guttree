@@ -106,8 +106,6 @@ sh quantifyMP.sh -p peptideSeqs_unique.fasta -o ../metaproteomic_application/ -t
 ```
 Details about every step and all the scripts involved in metaproteomic qunatification could be found [here](#quantifying-metaproteomic-data-over-the-phylogenetic-tree)
 
-In this section we will explain the scripts and the steps involved in demonstrating the practicaility of the tree in a metagenomics context. Here in this case we assume the user to provide a set of peptides that have been identified before. Searching and identifying peptides is beyond the scope of this study.
-
 
 
 ### Metagenomic Application of the gut tree
@@ -409,6 +407,9 @@ python3 make_iTOL_node_mostSpecificTaxaAssignment_labels.py ../data/combinedTree
 ```
 
 ### Quantifying Metaproteomic data over the phylogenetic tree
+
+In this section we will explain the scripts and the steps involved in demonstrating the practicaility of the tree in a metagenomics context. Here in this case we assume the user to provide a set of peptides that have been identified before. Searching and identifying peptides is beyond the scope of this study.
+
 
 #### Mapping protein sequence IDs to Bin IDs
 
