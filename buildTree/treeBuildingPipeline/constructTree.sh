@@ -40,9 +40,9 @@ pfam_db=../treeBuildingData/ribosmal_GTP_EFTU_pfam_db/ribosomal_GTP_EFTU_profile
 
 python3 unifyGenomeExtensions.py $genomes_directory 
 
-sh runFGS.sh -i $genomes_directory -t $n_cores -o $FGSFolder
+sh runFGS_parallel.sh -i $genomes_directory -t $n_cores -o $FGSFolder
 
-sh runHMMSCAN_parllel.sh -i $FGSFolder -t $n_cores -o $HMMSCAN_outFolder -m $pfam_db -e .faa
+sh runHMMSCAN_parallel.sh -i $FGSFolder -t $n_cores -o $HMMSCAN_outFolder -m $pfam_db -e .faa
 
 python3 extractPfamSeqHits.py $HMMSCAN_outFolder $n_cores $data_dir
 
