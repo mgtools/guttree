@@ -1,5 +1,5 @@
-|Accession|Pfam|
-------------------
+| Accession | Pfam |
+|-----------|----------------|
 |PF03946.14|Ribosomal_L11_N|
 |PF01272.19|GreA_GreB|
 |PF01084.20|Ribosomal_S18|
