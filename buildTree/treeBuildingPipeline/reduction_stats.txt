@@ -1,0 +1,3 @@
+original input matrix shape,(3307, 102880)
+clean columns matrix shape(3307, 33098)
+clean columns, clean rows matrix shape(3293, 33098)
