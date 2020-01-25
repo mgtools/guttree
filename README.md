@@ -23,22 +23,20 @@
     
 Click [here](#setting-up-required-programs-and-packages) for details about installing/setting up prerequisites.
 
-### Buidling Phylogenetic Tree by marker profile distance averaging method
+### Buidling Phylogenetic Tree with FastTree and MSA concatenation
 In this section we will describe the steps and the code used to build a phylogenetic tree given list of contigs. The algorithm starts from a set of contigs or genomes (depending on the completeness of your datasets) to a phylogenetic tree representing these contigs. The main steps involved for this pipeline is as follows:
 
 * [Prediction protien coding genes from contigs or genomes](#prediction-protien-coding-genes-from-contigs-or-genomes)
 * [Searching for marker gene profile matches within the predicted proteins](#searching-for-marker-gene-profile-matches-within-the-predicted-proteins)
 * [Extracting pfam to sequene hits and best pfam to sequence hit](#extracting-pfam-to-sequene-hits-and-best-pfam-to-sequence-hit)
 * [Creating pfam multi-fasta files for multiple sequence alignments](#creating-pfam-multi-fasta-files-for-multiple-sequence-alignments)
-* [Performing multiple sequence alignments using MUSCLE](#performing-multiple-sequence-alignments-using-MUSCLE)
+* [Performing multiple sequence alignments using hmmalign](#performing-multiple-sequence-alignments-using-hmmalign)
+* [Alignment concatentation and improvement](#alignment-concatentation-and-improvement)
 * [Phylogenetic tree construction using FastTree](#phylogenetic-tree-construction-using-fasttree)
-* [Phylogenetic tree to distance matrix](#phylogenetic-tree-to-distance-matrix)
-* [Combining distance matrices](#combining-distance-matrices)
-* [Building a final Tree using neighborhood joining approach](#building-a-final-tree-using-neighborhood-joining-approach)
 
 All of these steps and the code involved are explained below, to run this entire pipeline in one command we made a script that combines all the steps. This script requires 1 mandatory command line argument which is the directory where the contigs and the genome are located in fasta format. You can also satisfy the number of cores used using the -t parameters (default is 40).
 
-To run pipleine in one command simply use the script [constructTree.sh](buildTree/treeBuildingPipeline/constructTree.sh).
+To run pipleine in one command simply use the script [constructTree_FastTree_hmmalign.sh](buildTree/treeBuildingPipeline/constructTree_FastTree_hmmalign.sh).
 
 example to run script:
 ```
@@ -210,89 +208,29 @@ python3 extract_profile_sequences.py ../../data/pfam2bins2bestPfamSeqs_dic_of_di
 ```
 
 
-#### Performing multiple sequence alignments using MUSCLE
-Now that best sequence hits between pfams and genomes are extracted in mulit-fasta format, MUSCLE is used to calculate one multiple sequence alignment per pfam. To do this we use two scripts, a python script calling MUSCLE which is ['get_pfam_MSA.py'](buildTree/treeBuildingPipeline/get_pfam_MSA.py) and another bash script that parallelizes this process found [here](buildTree/treeBuildingPipeline/get_MSA_parallel.sh). The bash script takes three arguments:
+#### Performing multiple sequence alignments using hmmalign
+Now that best sequence hits between pfams and genomes are extracted in mulit-fasta format, hmmalign is used to calculate one multiple sequence alignment per pfam. To do this we use two scripts, a bash script calling hmmalign which is ['runHMMALIGN_parallel.sh'](buildTree/treeBuildingPipeline/runHMMALIGN_parallel.sh) and another bash script that contains the actual hmmalign command found [here](buildTree/treeBuildingPipeline/runHMMALIGNcommand.sh). The bash script takes four arguments:
 
 1) input directory for the folder containing multi-fasta files
 2) number of threads to be used
 3) output directory for the script to dump the multiple sequence alignments (in fasta format)
+4) extension of the fasta formatted sequence files found in the input directory
 
 example to run the script:
 ```
-sh get_MSA_parallel.sh -i ../../data/bin2bestPfam_seqs -t 40 -o ../../data/pfam_MSA
+sh runHMMALIGN_parallel.sh -i ../../data/bin2bestPfam_seqs -t 40 -o ../../data/pfam_MSA -e .faa
 ````
+
+####Alignment concatentation and improvement
+After obtaining the multiple sequence alignments for each pfam, we convert these indivual alignments from fasta format to stockholm format using the script ['convertSeqAlignments.py'](buildtree/treeBuildingPipeline/convertSeqAlignments.py), this is followed by alignment filtering, where only the parts of the alignments that are aligned with the hmm model are kept and the rest are discarded. This is done using the script ['stockholm2RefAnnotFasta.py'](buildtree/treeBuildingPipeline/stockholm2RefAnnotFasta.py). Gaps were used to fill in the alignments for genomes with missing marker genes, which is done using the script ['fillMSAGaps.py'](buildtree/treeBuildingPipeline/fillMSAGaps.py). The individual multiple sequence alignments are then conatenated using the script ['supermat_phylo.R'](buildtree/treeBuldingPipeline/supermat_phylo.R) into a super matrix. The alignment is then transformed back to fasta format with the script ['phylip2fasta.py'](buildtree/treeBuildingPipeline/phylip2fasta.py), and refined by the script ['improveMSA.py'](buildtree/treeBuildingPipeline/improveMSA.py).
 
 #### Phylogenetic tree construction using FastTree
-After obtaining the multiple sequence alignments for each pfam, we use FastTree to construct one phylogenetic tree per pfam. To do this we use two scripts, a python script calling MUSCLE which is ['getFastTreeFromMSA.py'](buildTree/treeBuildingPipeline/getFastTreeFromMSA.py) and another bash script that parallelizes this process found [here](buildTree/treeBuildingPipeline/get_FastTree_parallel.sh). The bash script takes three arguments:
+After obtaining the final concatenated multiple sequence alignment from all the domains, we use FastTree to construct a final phylogenetic tree. We use FastTree under WAG and GAMMA models
 
-1) input directory for the folder containing multiple sequence alignments
-2) number of threads to be used
-3) output directory for the script to dump the phylogenetic trees (in newick format)
-
-example to run the script:
+example of FastTree command used:
 ```
-sh get_FastTree_parallel.sh -i ../../data/pfam_MSA -t 20 -o ../../data/pfam_FastTree
+FastTree -wag -gamma -pseudo -spr 4 -mlacc 2 -slownni dir/to/concatenated/msa.fasta > output/dir/to/dump/final_tree.tree
 ````
-
-#### Phylogenetic tree to distance matrix
-After having created individual trees for each pfam, now we need to get pairwise species evolutionary distances from these trees. We do that by using and R package which calculates such distances based on tree branches. We use an Rscript to do that which can be found [here](buildTree/treeBuildingPipeline/cophenetic_phylo.R). This script takes two command line arguments to run:
-
-1) the input directory for the phylogenetic trees
-2) the output directory to store the calculated distance matrices
-
-example to run the script:
-```
-Rscript cophenetic_phylo.R ../../data/pfam_FastTree/ ../../data/pfam_FastTree_treeDist/
-```
-
-#### Combining distance matrices
-Now that we have individual distance matrices for each of the pfam profiles, it is time to do the averaging step and complie one big matrix composed of all the species, whose values are going to be the average values of all the values within the individual matrices for a particular species pair. Note that if a distance between a species pair does not exist in one of the pfam matrices, then that matrix will not be included in the averaging for that species pair. To perform this averaging we made the script called ['combTreeDistMats.py'](buildTree/treeBuildingPipeline/combTreeDistMats.py). This script takes one command line argument to run:
-
-1) input directoru for the calculated pfam distance matrices
-
-example to run the script:
-```
-python3 combTreeDistMats.py ../../data/pfam_FastTree_treeDist/
-```
-
-#### Building a final Tree using neighborhood joining approach
-After combining all the individual pfam matrices into one matrix containing all against all pairwise evolutionary distances between the pariticipating species, we now have all the necesarry information to build a final tree covering all the species. To build the final tree from a distance matrix we are using a neighborhood joining approach provided by PHYLIP software. This requires a few steps to get to a tree from a distance matrix. The first step is to convert the distance matrix to phylip format, this is done by the script ['dfMat2phylip.py'](buildTree/treeBuildingPipeline/dfMat2phylip.py). This script requires one command line argumment which is the averaged distance matrix file tor run:
-
-1) directory to the averaged pfam distance matrix file
-
-We also need to change the leaf names to padded format since neighborhood joining program in PHYLIP requires a padding of 10 for the leaf IDs within the distance matrix. This is achieved through the script ['convert2phylip10Padding.py'](buildTree/treeBuildingPipeline/convert2phylip10Padding.py). This script requires two command line arguments:
-
-1) path to the input matrix file created by the first script
-2) output  directory to store the mapping dictionary between these arbitrary padded leaf IDs and the actual leaf IDs.
-
-This script will also produce a file that is the command line arguments to run PHYLIP's neighbor program.
-
-Next it is time to call PHYLIP's neighbor program through the command line to actually create a phylogenetically tree in newick format.
-The final step is to map back these arbitrary IDs to the actual leaf IDs using the created dictionary. This is done through the script ['mapBackTreeLeafNames.py'](buildTree/treeBuildingPipeline/mapBackTreeLeafNames.py), which requires two command line arguments to run:
-
-1) path to the ID mapping dictionary file
-2) path to the output tree created by PHYLIP's neighbor program
-
-A final step after creating the tree is to provide the internal parent nodes with names so that later they can be referred. To do this we wrote a script called ['annotateTreeParents.py'](buildTree/treeBuildingPipeline/annotateTreeParents.py), which requries two command line arguments to run:
-
-1) path to the tree file
-2) output directory to store the named tree.
-
-example to run these scripts:
-```
-python3 dfMat2phylip.py ../../data/pfam_FastTree_treeDist/allPfamsAveraged_treeDist.txt
-
-python3 convert2phylip10Padding.py ../../data/pfam_FastTree_treeDist/allPfamsAveraged_treeDist.phylip ../../data/
-
-neighbor < neighbor_cmds.txt > screenout &
-
-mv outfile ../../data/combinedTree/allPfamsAveraged_treeDist.outfile
-mv outtree ../../data/combinedTree/allPfamsAveraged_treeDist.outtree
-
-python3 mapBackTreeLeafNames.py ../../data/allPfamsAveraged_treeDist_padded_number2bin_dic.json ../../data/combinedTree/allPfamsAveraged_treeDist.outtree
-
-python3 annotateTreeParents.py ../../data/combinedTree/allPfamsAveraged_treeDist.outtree ../../data/combinedTree/
-```
 
 
 
