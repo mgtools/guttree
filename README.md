@@ -100,7 +100,7 @@ For the Metaproteomic application of our gut tree, we expect the user to provide
 
 Example to run this script:
 
-```
+```--------
 sh quantifyMP.sh -p peptideSeqs_unique.fasta -o ../metaproteomic_application/ -t 40 -l phylum
 ```
 Details about every step and all the scripts involved in metaproteomic qunatification could be found [here](#quantifying-metaproteomic-data-over-the-phylogenetic-tree)
@@ -134,7 +134,7 @@ Example to run this script:
 sh calculate_bootstraps.sh -i /dir/to/tree/file.tree -t number_of_threads
 ```
 
-### -----Detail explanation of the scripts involved in the different pipelines mentioned above-------------
+### -----Detail explanation of the scripts involved in the different pipelines mentioned above-----
 
 In this section we provide details of every script and every step involved in the different pipelines explained above, in case the user wants to understand and/or modify some of the steps.
 
