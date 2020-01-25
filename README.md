@@ -121,12 +121,19 @@ sh quantifyMG.sh -s SRR769523.sama -o ../metagenomic_application/
 ```
 Details about every step and all the scripts involved in metagenomic qunatification could be found [here](#quantifying-metagenomic-data-over-the-phylogenetic-tree)
 
+### Calculating bootstraps and confidence intervals of the gut tree
 
+To calculate bootsrapped trees we put together some scripts necesarry to perform this, and made the script ['calculate_bootstraps.sh'](calcuateBootstraps/calculate_bootstraps.sh) that generates bootstrapped trees and calculates confidence intervals in one command. This script takes two command line arguments to run:
 
+1) input directory of the tree to bootstrap
+2) number of cores to calculate the bootstrapped trees
 
+Example to run this script:
 
+````
+sh calculate_bootstraps.sh -i /dir/to/tree/file.tree -t number_of_threads
 
-### ----------------Detail explanation of the scripts involved in the different pipelines mentioned above--------------------------
+### -----Detail explanation of the scripts involved in the different pipelines mentioned above-------------
 
 In this section we provide details of every script and every step involved in the different pipelines explained above, in case the user wants to understand and/or modify some of the steps.
 
