@@ -2,10 +2,11 @@
 
 ### git hub repository for human gut tree project
 
-* The repository will contain a full pipeline of building a bacterial tree of life starting from contigs and or binned genomes all the way to a tree in newick format.
-* This github will also include helper scripts to annotae the tree (and the steps involved in annotating the tree)
+* The repository contains a full pipeline of building a bacterial tree of life starting from contigs and or binned genomes all the way to a tree in newick format.
+* This github also includes helper scripts to annotae the tree (and the steps involved in annotating the tree)
 * scripts needed to generate label files used in the metaproteomic application
 * scripts needed to generate label files used in metagenomic aapplication
+* scripts needed to generate bootstraps and compute confidence intervals
 
 ### Prerequisite Programs needed to run the pipeline:
 
