@@ -130,8 +130,9 @@ To calculate bootsrapped trees we put together some scripts necesarry to perform
 
 Example to run this script:
 
-````
+```
 sh calculate_bootstraps.sh -i /dir/to/tree/file.tree -t number_of_threads
+```
 
 ### -----Detail explanation of the scripts involved in the different pipelines mentioned above-------------
 
