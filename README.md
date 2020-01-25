@@ -221,7 +221,7 @@ example to run the script:
 sh runHMMALIGN_parallel.sh -i ../../data/bin2bestPfam_seqs -t 40 -o ../../data/pfam_MSA -e .faa
 ````
 
-####Alignment concatentation and improvement
+#### Alignment concatentation and improvement
 After obtaining the multiple sequence alignments for each pfam, we convert these indivual alignments from fasta format to stockholm format using the script ['convertSeqAlignments.py'](buildtree/treeBuildingPipeline/convertSeqAlignments.py), this is followed by alignment filtering, where only the parts of the alignments that are aligned with the hmm model are kept and the rest are discarded. This is done using the script ['stockholm2RefAnnotFasta.py'](buildtree/treeBuildingPipeline/stockholm2RefAnnotFasta.py). Gaps were used to fill in the alignments for genomes with missing marker genes, which is done using the script ['fillMSAGaps.py'](buildtree/treeBuildingPipeline/fillMSAGaps.py). The individual multiple sequence alignments are then conatenated using the script ['supermat_phylo.R'](buildtree/treeBuldingPipeline/supermat_phylo.R) into a super matrix. The alignment is then transformed back to fasta format with the script ['phylip2fasta.py'](buildtree/treeBuildingPipeline/phylip2fasta.py), and refined by the script ['improveMSA.py'](buildtree/treeBuildingPipeline/improveMSA.py).
 
 #### Phylogenetic tree construction using FastTree
