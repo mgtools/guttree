@@ -19,6 +19,7 @@
 * Bowtie2
 * MUSCLE
 * FastTree
+* PHYLIP tools
 
     
 Click [here](#setting-up-required-programs-and-packages) for details about installing/setting up prerequisites.
