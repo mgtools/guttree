@@ -45,7 +45,7 @@ sh constructTree.sh -i ../../genomes_dir/ -t 40
 ```
 
 An overview of the pipeline is summarized in this figure:
-![GitHub Logo](buildTree/tree_building_pipeline.png)
+![GitHub Logo](buildTree/tree_building_pipeline_new_pipeline.png)
 
 For details about all the steps involved we refer the user [here](#buidling-phylogenetic-tree)
 
