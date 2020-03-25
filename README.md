@@ -7,6 +7,7 @@
 * scripts needed to generate label files used in the metaproteomic application
 * scripts needed to generate label files used in metagenomic aapplication
 * scripts needed to generate bootstraps and compute confidence intervals
+* genomes used to construct the gut-tree can be found [here](https://omics.informatics.indiana.edu/guttree/)
 
 ### Prerequisite Programs needed to run the pipeline:
 
