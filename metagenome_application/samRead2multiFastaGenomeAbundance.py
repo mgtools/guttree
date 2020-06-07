@@ -229,7 +229,7 @@ def read_sam():
     prev_read = ''
     mate_count = 0
     contig_2_genome_map_dic, genome_len_dic = multi_fasta_2_genome(sys.argv[3])
-    with open('congit_2_genome_map_dic.json', 'w') as out_f:
+    with open('contig_2_genome_map_dic.json', 'w') as out_f:
         json.dump(contig_2_genome_map_dic, out_f)
     for genome_id in set(contig_2_genome_map_dic.values()):
         #create a genome instance at that dictionary entry
@@ -409,7 +409,18 @@ def get_pm_scaling_factor(genome_dic):
 if len(sys.argv) != 4:
     print ('please enter name of sam input file and name of output file and the directory of the fasta files with which you have created the index files ; i.e python samRead2multiFastaGenomeAbundance.py dir/to/sam/example.sam dir/to/out/example.out dir/to/fasta/files.fa')
 else:
+    sam_f = sys.argv[1]
+    out_dir = sys.argv[2]
+    read_out_fname, fragment_out_fname = sam_f.rsplit('.', 1)[0]+'_read_out.tsv', sam_f.rsplit('.', 1)[0]+'_fragment_out.tsv'
     genome_dic, read_dic, fragment_dic = read_sam()
+    with open(out_dir + read_out_fname, 'w') as read_out_f, open(out_dir + fragment_out_fname, 'w') as fragment_out_f:
+        read_out_f.write('read_id\tgenomes\n')
+        for read in read_dic:
+            read_out_f.write(read + '\t' + '|'.join(read_dic[read].genomes)+'\n')
+        fragment_out_f.write('fragment_id\tgenomes\n')
+        for frag in fragment_dic:
+            fragment_out_f.write(frag + '\t' + '|'.join(fragment_dic[frag].genomes)+'\n')
+
     per_million_scaling_factor = get_pm_scaling_factor(genome_dic)
     for genome_id in genome_dic:
         print (genome_id)
@@ -421,7 +432,7 @@ else:
     set_specific_coeff(genome_dic, fragment_dic)
     set_abundance(genome_dic, fragment_dic)
     f_name = sys.argv[1].rsplit('/', 1)[-1].split('.')[0]+'_abundance.txt'
-    out_f = open(sys.argv[2] + f_name, 'w')
+    out_f = open(out_dir + f_name, 'w')
     out_f.write('genome_id\tcoverage\tuniq_abundance\tmulti_abundance\ttotal_abundance\ttotal_abundance_pmkb\n')    
     for genome_id in genome_dic:
         out_f.write(genome_id+'\t'+str(genome_dic[genome_id].coverage)+'\t' + str(genome_dic[genome_id].unique_abundance) + '\t'+str(genome_dic[genome_id].multi_abundance) +'\t'+ str(genome_dic[genome_id].abundance)+'\t'+str(genome_dic[genome_id].abundance_pmkb)+'\n')
