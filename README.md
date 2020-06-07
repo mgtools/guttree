@@ -473,8 +473,9 @@ python3 make_iTOL_node_mostSpecificTaxaAssignment_MGAbundance.py ../data/combine
 python3 make_iTOLSymbolFileFromMGAbundanceDic.py ../data/allNodes2taxon_dic.json nodeName2MGPercentageAbundance_dic.json ../metagenome_application/
 
 ```
+#### Reads To Least Common Ancestor (LCA) clades mapping
 
-
+The method that we developed to assign metagenomics reads for quantification purposes is to assign each read to it's least common ancestor within our tree. This method of read assignment differs from the previous method by one major script which could be found [here](metagenome_application/get_fragment2LCA_node_assignments_report.py). This script is responsible for assigning reads to the LCA bins. We introduce here the idea of fragments instead of reads which is use to denote a paired end read. We quantify fragments (and not reads) so that we do not overestimate the abundance quantifications of the genomes (i.e. if one fragment (a paired end read) gets mapped to one contig, then it is counted as once and not twice). The rest of the steps for visualizing the abundance levels over the constructed tree is similar to the one described in the previous section. Creating an iTOL importable species composition label and symbol files are done with these two scripts respectively [make_iTOL_node_mostSpecificTaxaAssignment_LCA_fragments.py](metagenome_application/make_iTOL_node_mostSpecificTaxaAssignment_LCA_fragments.py) and [make_iTOLSymbolFileFrom_LCA_fragments.py](metagenome_application/make_iTOLSymbolFileFrom_LCA_fragments.py).
 
 
 ## Setting up required programs and packages
