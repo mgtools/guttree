@@ -124,7 +124,7 @@ For our first method to assign reads to genomes we followed the method proposed 
 Example to run this script:
 
 ```
-sh quantifyMG.sh -s SRR769523.sam -o ../metagenomic_application/ -g /dir/to/genomes/
+sh quantifyMG_multimappedReads.sh -s SRR769523.sam -o ../metagenomic_application/ -g /dir/to/genomes/
 ```
 Details about every step and all the scripts involved in metagenomic qunatification could be found [here](#quantifying-metagenomic-data-over-the-phylogenetic-tree)
 
