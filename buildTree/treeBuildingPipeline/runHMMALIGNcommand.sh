@@ -1,17 +1,19 @@
 #!/bin/bash                                                                                                  
 
 
-while getopts i:o: option
+while getopts i:o:d:f: option
 do
 case "${option}"
 in
     i) in_f=${OPTARG};;
     o) out_dir=${OPTARG};;
+    d) in_dir=${OPTARG};;
+    f) data_dir=${OPTARG};;
 esac
 done
 
-in_dir='../treeBuildingData/bac_120_markers/'
-data_dir='../../data/'
+#in_dir='../treeBuildingData/bac_120_markers/'
+#data_dir='../../data/'
 #echo $in_f
 fname=$(echo $in_f | cut -d'/' -f4)                                            
 profile_name=$(echo $fname | cut -d'.' -f1)
