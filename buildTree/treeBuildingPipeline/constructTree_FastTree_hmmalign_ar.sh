@@ -55,8 +55,6 @@ python3 extract_profile_sequences.py $data_dir'pfam2bins2bestPfamSeqs_dic_of_dic
 
 sh runHMMALIGN_parallel.sh -i ../treeBuildingData/ar_122_markers/ -t $n_cores -o $data_dir'hmmalign_out/' -e .HMM -d $data_dir
 
-python3 convertSeqAlignments.py $data_dir'hmmalign_out/' $data_dir'pfam_MSA/'
-
 python3 stockholm2RefAnnotFasta.py $data_dir'hmmalign_out/' $data_dir'pfam_MSA/'
 
 python3 fillMSAGaps.py $genomes_directory $data_dir'pfam_MSA/' $data_dir'pfam_MSA_withGaps/'
