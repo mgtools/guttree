@@ -12,16 +12,17 @@ import json
 import pandas as pd
 import sys
 import copy
+from ete3 import Tree
 
 if len(sys.argv) != 4:
     print('please specify three command line arguments, example to run script, i.e. python3 bins2taxonomic_assignment_GTDBTK.py bacterial/taxonomic_f archeal/taxonomic_f out/dir')
 else:
 
-    bacterial_taxonomy_f = sys.argv[1]
-    archaeal_taxonomy_f = sys.argv[2]
-    out_dir = sys.argv[3]
+    taxonomy_f = sys.argv[1]
+    out_dir = sys.argv[2]
+    tree_f = sys.argv[3]
     
-    def get_bin2taxonomyMapping(taxonomy_f):
+    def get_bin2taxonomyMapping(taxonomy_f, leaves):
         line_count = 0
         bin2taxons_dic = dict()    
             
@@ -29,6 +30,8 @@ else:
         for i, row in taxonomy_df.iterrows():
             line_count += 1
             bin_id = row['user_genome']
+            if bin_id not in leaves:
+                continue
             taxonomies = row['classification'].split(';')
             taxonomy_hierarchy = {taxonomy.split('__')[0]:taxonomy.split('__')[-1] for taxonomy in taxonomies}
             bin2taxons_dic[bin_id] = taxonomy_hierarchy
@@ -57,18 +60,16 @@ else:
                 species += 1
         return kingdom, phylum, _class, order, family, genus, species
     
-    
-    bacterial_bin2taxons_dic, bacterial_line_count = get_bin2taxonomyMapping(bacterial_taxonomy_f)
-    archaeal_bin2taxons_dic, archaeal_line_count = get_bin2taxonomyMapping(archaeal_taxonomy_f)
-    
-    allBin2taxon_dic = copy.deepcopy(bacterial_bin2taxons_dic)
-    allBin2taxon_dic.update(archaeal_bin2taxons_dic)
-    line_count = bacterial_line_count + archaeal_line_count
+    tree = Tree(tree_f, format = 1)
+    leaves = tree.get_leaf_names()
+    allBin2taxon_dic, line_count = get_bin2taxonomyMapping(taxonomy_f, leaves)
     
     kingdom, phylum, _class, order, family, genus, species = get_classificationStats(allBin2taxon_dic)
     
     stats_f = 'allBins_taxaStats.txt'
     dic_f = 'allBin2taxon_dic.json'
+
+    line_count = len(allBin2taxon_dic)
     
     with open(out_dir+stats_f, 'w') as out_f:
         out_f.write('There were '+str(kingdom) + ' kingdom level classification out of '+str(line_count) + ' bins\n')

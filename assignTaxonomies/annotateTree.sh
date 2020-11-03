@@ -10,24 +10,25 @@ out_dir='../assignTaxonomoies/'
 
 taxonomy_level='phylum'
 
-bins2taxonDic_f='../data/allBin2taxon_dic.json'
-allNodes2taxonDic_f='../data/allNodes2taxon_dic.json'
+
 tree_f='../data/combinedTree/allPfamsAveraged_treeDist_clean_internalNodesNamed_rooted.outtree'
 
-while getopts a:b:o:p:l: option
+while getopts i:o:p:l: option
 do
 case "${option}"
 in
-    a) archaea_classification_f=${OPTARG};;
-    b) bacteria_classification_f=${OPTARG};;
+    i) classification_f=${OPTARG};;    
     o) out_dir=${OPTARG};;
     p) tree_f=${OPTARG};;
     l) taxonomy_level=${OPTARG};;
 esac
 done
 
+data_dir=$out_dir
+bins2taxonDic_f=$data_dir'allBin2taxon_dic.json'
+allNodes2taxonDic_f=$data_dir'allNodes2taxon_dic.json'
 
-python3 bins2taxonomic_assignment_GTDBTK.py $bacteria_classification_f $archaea_classification_f $data_dir
+python3 bins2taxonomic_assignment_GTDBTK.py $classification_f $data_dir $tree_f
 
 python3 extractSpecificLevelAnnotation.py $bins2taxonDic_f $taxonomy_level $data_dir
 
