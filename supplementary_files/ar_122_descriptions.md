@@ -1,4 +1,5 @@
 |accession|description|
+|---------|---------------------------------------------------|
 |PF00368.13|Hydroxymethylglutaryl-coenzyme A reductase|
 |PF00410.14|Ribosomal protein S8|
 |PF00466.15|Ribosomal protein L10|
