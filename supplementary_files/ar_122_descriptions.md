@@ -1,109 +1,56 @@
 |accession|description|
-
 |PF00368.13|Hydroxymethylglutaryl-coenzyme A reductase|
-
 |PF00410.14|Ribosomal protein S8|
-
 |PF00466.15|Ribosomal protein L10|
-
 |PF00687.16|Ribosomal protein L1p/L10e family|
-
 |PF00827.12|Ribosomal L15|
-
 |PF00900.15|Ribosomal family S4e|
-
 |PF01000.21|RNA polymerase Rpb3/RpoA insert domain|
-
 |PF01015.13|Ribosomal S3Ae family|
-
 |PF01090.14|Ribosomal protein S19e|
-
 |PF01092.14|Ribosomal protein S6e|
-
 |PF01157.13|Ribosomal protein L21e|
-
 |PF01191.14|RNA polymerase Rpb5, C-terminal domain|
-
 |PF01194.12|RNA polymerases N / 8 kDa subunit|
-
 |PF01198.14|Ribosomal protein L31e|
-
 |PF01200.13|Ribosomal protein S28e|
-
 |PF01269.12|Fibrillarin|
-
 |PF01280.15|Ribosomal protein L19e|
-
 |PF01282.14|Ribosomal protein S24e|
-
 |PF01496.14|V-type ATPase 116kDa subunit family|
-
 |PF01655.13|Ribosomal protein L32|
-
 |PF01798.13|Putative snoRNA binding domain|
-
 |PF01864.12|Putative integral membrane protein DUF46|
-
 |PF01866.12|Putative diphthamide synthesis protein|
-
 |PF01868.11|Domain of unknown function UPF0086|
-
 |PF01984.15|Double-stranded DNA-binding domain|
-
 |PF01990.12|ATP synthase (F/14-kDa) subunit|
-
 |PF02006.11|Protein of unknown function DUF137|
-
 |PF02978.14|Signal peptide binding domain|
-
 |PF03874.11|RNA polymerase Rpb4|
-
 |PF04019.7|Protein of unknown function (DUF359)|
-
 |PF04104.9|Eukaryotic and archaeal DNA primase, large subunit|
-
 |PF04919.7|Protein of unknown function (DUF655)|
-
 |PF07541.7|Eukaryotic translation initiation factor 2 alpha subunit|
-
 |PF13656.1|RNA polymerase Rpb3/Rpb11 dimerisation domain|
-
 |PF13685.1|Iron-containing alcohol dehydrogenase|
-
 |TIGR00021|rpiA: ribose 5-phosphate isomerase A|
-
 |TIGR00037|eIF_5A: translation elongation factor IF5A|
-
 |TIGR00042|TIGR00042: non-canonical purine NTP pyrophosphatase, RdgB/HAM1 family|
-
 |TIGR00064|ftsY: signal recognition particle-docking protein FtsY|
-
 |TIGR00111|pelota: mRNA surveillance protein pelota|
-
 |TIGR00134|gatE_arch: glutamyl-tRNA(Gln) amidotransferase, subunit E|
-
 |TIGR00240|ATCase_reg: aspartate carbamoyltransferase, regulatory subunit|
-
 |TIGR00264|TIGR00264: alpha-NAC homolog|
-
 |TIGR00270|TIGR00270: TIGR00270 family protein|
-
 |TIGR00279|uL16_euk_arch: ribosomal protein uL16|
-
 |TIGR00283|arch_pth2: peptidyl-tRNA hydrolase|
-
 |TIGR00291|RNA_SBDS: rRNA metabolism protein, SBDS family|
-
 |TIGR00293|TIGR00293: prefoldin, alpha subunit|
-
 |TIGR00307|eS8: ribosomal protein eS8|
-
 |TIGR00308|TRM1: N2,N2-dimethylguanosine tRNA methyltransferase|
-
 |TIGR00323|eIF-6: putative translation initiation factor eIF-6|
-
 |TIGR00324|endA: tRNA-intron lyase|
-
 |TIGR00335|primase_sml: putative DNA primase, eukaryotic-type, small subunit|
 
 |TIGR00336|pyrE: orotate phosphoribosyltransferase|
