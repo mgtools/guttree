@@ -37,4 +37,4 @@ else:
     #tree.name = 'root'                
     tree.write(format = 1, outfile = tree_in_f.rsplit('.', 1)[0]+'_internalNodesNamed.outtree')
     
-    open(out_dir+'leaves.txt', 'w').write('\n'.join([item.name for item in tree.get_leaf_names()]))
+    open(out_dir+'leaves.txt', 'w').write('\n'.join([item for item in tree.get_leaf_names()]))

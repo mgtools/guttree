@@ -52,7 +52,7 @@ else:
     
     parent_count = 0
     for node in tree.traverse("postorder"):
-        if 'P' in node.name:
+        if node.name.startswith('P'):
             count = int(node.name.replace('P', ''))
             if count > parent_count:
                 parent_count = count
@@ -62,4 +62,4 @@ else:
             node.name = 'P'+str(parent_count)
             parent_count += 1
     
-    tree.write(outfile = tree_in_f.rsplit('.', 1)[0]+'_rooted.outtree', format = 1)
+    tree.write(outfile = out_dir + tree_in_f.rsplit('/', 1)[-1].rsplit('.', 1)[0]+'_rooted.outtree', format = 1)
