@@ -86,6 +86,8 @@ else:
             taxa['p'] = 'Firmicutes'
         if taxa['c'].startswith('Bacilli'):
             taxa['c'] = 'Bacilli'
+        if taxa['c'].startswith('Clostridia'):
+            taxa['c'] = 'Clostridia'
         allBin2taxon_dic[_bin] = taxa
     
     
